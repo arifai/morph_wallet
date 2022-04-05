@@ -11,7 +11,10 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
-  flutter_svg: ^1.0.3
+  get_it: ^7.2.0
+  # bloc: ^8.0.3
+  flutter_bloc: ^8.0.1
+  bip39: ^1.0.6
 
 dev_dependencies:
   flutter_test:
@@ -27,12 +30,12 @@ flutter:
     - assets/images/
   
   fonts:
-    - family: CircularStd
+    - family: Poppins
       fonts:
-        - asset: assets/fonts/CircularStd-Book.otf
-        - asset: assets/fonts/CircularStd-Light.otf
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Light.ttf
           weight: 300
-        - asset: assets/fonts/CircularStd-Medium.otf
+        - asset: assets/fonts/Poppins-Medium.ttf
           weight: 600
-        - asset: assets/fonts/CircularStd-Bold.otf
+        - asset: assets/fonts/Poppins-Bold.ttf
           weight: 700
