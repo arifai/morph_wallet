@@ -6,7 +6,7 @@ import 'package:morph_wallet/blocs/morph/morph_bloc.dart';
 import 'package:morph_wallet/blocs/morph/morph_event.dart';
 import 'package:morph_wallet/blocs/simple_bloc_observer.dart';
 import 'package:morph_wallet/cores/locator.dart';
-import 'package:morph_wallet/cores/morph_core.dart';
+import 'package:morph_wallet/cores/morph_theme.dart';
 import 'package:morph_wallet/route_generator.dart';
 import 'package:morph_wallet/screens/onboarding/onboarding_screen.dart';
 import 'package:morph_wallet/services/navigation_service.dart';
