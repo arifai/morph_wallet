@@ -57,8 +57,8 @@ class MorphTheme {
         backgroundColor: MorphColor.darkColor,
         iconTheme: IconThemeData(color: MorphColor.whiteColor),
         titleTextStyle: TextStyle(
-          fontSize: 17.0,
-          fontFamily: 'Poppins',
+          fontSize: 15.0,
+          fontFamily: 'Inter',
           fontWeight: FontWeight.bold,
           color: MorphColor.whiteColor,
         ),
@@ -78,7 +78,7 @@ class MorphTheme {
           // textStyle: MaterialStateProperty.all(
           //   const TextStyle(
           //     fontSize: 17.0,
-          //     fontFamily: 'Poppins',
+          //     fontFamily: 'Inter',
           //     fontWeight: FontWeight.bold,
           //     color: MorphColor.secondaryDarkColor,
           //   ),
@@ -96,8 +96,7 @@ class MorphTheme {
           ),
           textStyle: MaterialStateProperty.all(
             const TextStyle(
-              fontSize: 16.0,
-              fontFamily: 'Poppins',
+              fontFamily: 'Inter',
               fontWeight: FontWeight.bold,
               color: MorphColor.whiteColor,
             ),
@@ -109,7 +108,7 @@ class MorphTheme {
         thickness: 1.5,
       ),
       textTheme: originalTextTheme.apply(
-        fontFamily: 'Poppins',
+        fontFamily: 'Inter',
         bodyColor: MorphColor.whiteColor,
       ),
     );

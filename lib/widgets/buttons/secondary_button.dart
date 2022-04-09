@@ -20,9 +20,8 @@ class SecondaryButton extends StatelessWidget {
       child: Text(
         title,
         style: const TextStyle(
-          fontSize: 16.0,
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.bold,
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.w500,
           color: MorphColor.greyColor,
         ),
       ),
@@ -58,7 +57,7 @@ class SecondaryButton extends StatelessWidget {
     //         title,
     //         style: const TextStyle(
     //           fontSize: 17.0,
-    //           fontFamily: 'Poppins',
+    //           fontFamily: 'Inter',
     //           fontWeight: FontWeight.bold,
     //           color: MorphColor.secondaryDarkColor,
     //         ),
