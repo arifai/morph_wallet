@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:morph_wallet/cores/locator.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
+import 'package:morph_wallet/services/navigation_service.dart';
 import 'package:morph_wallet/size_config.dart';
 import 'package:morph_wallet/widgets/buttons/primary_button.dart';
-import 'package:morph_wallet/widgets/mnemonic_widget.dart';
-import 'package:morph_wallet/widgets/warning_widget.dart';
+import 'package:morph_wallet/widgets/mnemonic/mnemonic_widget.dart';
+import 'package:morph_wallet/widgets/commons/warning_widget.dart';
 
 class CreateWallet extends StatelessWidget {
   final List<String> mnemonic;
@@ -14,6 +16,7 @@ class CreateWallet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    final NavigationService _navService = locator<NavigationService>();
 
     return Scaffold(
       appBar: AppBar(
@@ -60,7 +63,8 @@ class CreateWallet extends StatelessWidget {
             ),
             PrimaryButton(
               title: 'Selanjutnya',
-              onPressed: () {},
+              onPressed: () =>
+                  _navService.navigateTo(MorphRoute.walletInfoForm),
             ),
           ],
         ),

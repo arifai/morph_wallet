@@ -5,6 +5,7 @@ class MorphRoute {
   static const onboarding = '/onboarding_screen';
   static const createWallet = '/create_wallet_screen';
   static const importWallet = '/import_wallet_screen';
+  static const walletInfoForm = '/wallet_info_form_screen';
 }
 
 /// Morph images asset
@@ -27,7 +28,7 @@ class MorphColor {
   static const Color whiteColor = Colors.white;
   static const Color primaryColor = Color(0xFF8B50F5);
   static const Color errorColor = Color(0xFFF13440);
-  static const Color yellowColor = Color(0xFFDCA73C);
+  static const Color yellowColor = Color(0xFFF0B134);
   static const Color darkYellowColor = Color(0xFF3F3727);
   static const Color pinkColor = Color(0xFFF5509F);
   static const Color greyColor = Color(0xFF9E9E9E);
@@ -101,6 +102,34 @@ class MorphTheme {
               color: MorphColor.whiteColor,
             ),
           ),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        contentPadding: const EdgeInsets.only(left: 20.0, right: 20.0),
+        hintStyle: const TextStyle(
+          color: MorphColor.greyColor,
+          fontFamily: 'Inter',
+        ),
+        iconColor: MorphColor.greyColor,
+        suffixIconColor: MorphColor.greyColor,
+        fillColor: MorphColor.secondaryDarkColor,
+        suffixStyle: const TextStyle(color: MorphColor.greyColor),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4.0),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4.0),
+          borderSide: const BorderSide(color: MorphColor.primaryColor),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4.0),
+          borderSide: const BorderSide(color: MorphColor.primaryColor),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4.0),
+          borderSide: const BorderSide(color: MorphColor.errorColor),
         ),
       ),
       dividerTheme: const DividerThemeData(

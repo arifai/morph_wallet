@@ -7,14 +7,14 @@ class Account {
   final double lamports;
   final double idrBalance;
 
-  Account(
-    this.name,
-    this.publicKey,
-    this.mnemonic,
-    this.password,
-    this.lamports,
-    this.idrBalance,
-  );
+  Account({
+    required this.name,
+    required this.publicKey,
+    required this.mnemonic,
+    required this.password,
+    this.lamports = 0,
+    this.idrBalance = 0,
+  });
 }
 
 class Mnemonic {

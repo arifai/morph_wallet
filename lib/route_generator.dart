@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:morph_wallet/blocs/morph/morph_bloc.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
 import 'package:morph_wallet/screens/create_wallet/create_wallet.dart';
+import 'package:morph_wallet/screens/create_wallet/wallet_info_form.dart';
 import 'package:morph_wallet/screens/empty/empty_screen.dart';
 import 'package:morph_wallet/screens/onboarding/onboarding_screen.dart';
 
@@ -23,6 +24,8 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => CreateWallet(mnemonic: args as List<String>),
         );
+      case MorphRoute.walletInfoForm:
+        return MaterialPageRoute(builder: (_) => const WalletInfoFormScreen());
       default:
         return MaterialPageRoute(builder: (_) => const EmptyScreen());
     }
