@@ -21,7 +21,7 @@ class SecondaryButton extends StatelessWidget {
         title,
         style: const TextStyle(
           fontFamily: 'Inter',
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.bold,
           color: MorphColor.greyColor,
         ),
       ),

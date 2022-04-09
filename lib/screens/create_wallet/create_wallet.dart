@@ -7,7 +7,7 @@ import 'package:morph_wallet/widgets/mnemonic_widget.dart';
 import 'package:morph_wallet/widgets/warning_widget.dart';
 
 class CreateWallet extends StatelessWidget {
-  final String mnemonic;
+  final List<String> mnemonic;
 
   const CreateWallet({Key? key, required this.mnemonic}) : super(key: key);
 
@@ -39,7 +39,7 @@ class CreateWallet extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 25.0, bottom: 10.0),
-                    child: MnemonicBox(mnemonic: mnemonic.split(' ')),
+                    child: MnemonicWidget(mnemonic: mnemonic),
                   ),
                   TextButton.icon(
                     icon: const Icon(
@@ -69,34 +69,6 @@ class CreateWallet extends StatelessWidget {
   }
 
   _onCopyButtonPressed(BuildContext context) {
-    Clipboard.setData(ClipboardData(text: mnemonic));
-  }
-}
-
-class MnemonicBox extends StatelessWidget {
-  final List<String> mnemonic;
-  const MnemonicBox({Key? key, required this.mnemonic}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // ignore: todo
-    // TODO: Add gradient outline border. See design on Figma.
-    return GridView.builder(
-      shrinkWrap: true,
-      itemCount: mnemonic.length,
-      // padding: const EdgeInsets.all(5.0),
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        mainAxisExtent: 50,
-        crossAxisSpacing: 3.0,
-        mainAxisSpacing: 3.0,
-      ),
-      itemBuilder: (_, idx) => Container(
-        color: MorphColor.darkColor,
-        padding: const EdgeInsets.all(4.0),
-        child: MnemonicWidget(mnemonic: mnemonic[idx]),
-      ),
-    );
+    Clipboard.setData(ClipboardData(text: mnemonic.join(' ')));
   }
 }

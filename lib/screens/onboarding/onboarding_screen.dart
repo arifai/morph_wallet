@@ -12,7 +12,7 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final NavigationService _navService = locator<NavigationService>();
-    String mnemonic = MnemonicUtil.generate();
+    List<String> mnemonic = MnemonicUtil.generate();
 
     void _onCreateButtonPressed() {
       _navService.navigateTo(MorphRoute.createWallet, arguments: mnemonic);

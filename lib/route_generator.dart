@@ -21,7 +21,7 @@ class RouteGenerator {
         );
       case MorphRoute.createWallet:
         return MaterialPageRoute(
-          builder: (_) => CreateWallet(mnemonic: args as String),
+          builder: (_) => CreateWallet(mnemonic: args as List<String>),
         );
       default:
         return MaterialPageRoute(builder: (_) => const EmptyScreen());

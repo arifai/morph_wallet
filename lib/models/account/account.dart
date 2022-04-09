@@ -4,7 +4,7 @@ class Account {
   final Mnemonic mnemonic;
   final String password;
   // SOL balance
-  final double laports;
+  final double lamports;
   final double idrBalance;
 
   Account(
@@ -12,7 +12,7 @@ class Account {
     this.publicKey,
     this.mnemonic,
     this.password,
-    this.laports,
+    this.lamports,
     this.idrBalance,
   );
 }
