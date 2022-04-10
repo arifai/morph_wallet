@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:morph_wallet/cores/locator.dart';
+import 'package:morph_wallet/cores/morph_core.dart';
+import 'package:morph_wallet/services/navigation_service.dart';
 import 'package:morph_wallet/widgets/buttons/primary_button.dart';
 import 'package:morph_wallet/widgets/form/form_widget.dart';
 
@@ -14,6 +17,7 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
   final TextEditingController _walletNameCtl = TextEditingController();
   final TextEditingController _passwordCtl = TextEditingController();
   final TextEditingController _confirmPasswordCtl = TextEditingController();
+  final NavigationService _navService = locator<NavigationService>();
   final _maxLength = 20;
   var _textLength = 0;
   bool _isVisible = true;
@@ -59,7 +63,8 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.next,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                        onEditingComplete: () =>
+                            FocusScope.of(context).nextFocus(),
                         onChanged: (value) {
                           setState(() => _textLength = value.length);
                         },
@@ -81,7 +86,8 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.next,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                        onEditingComplete: () =>
+                            FocusScope.of(context).nextFocus(),
                         onChanged: (value) {
                           setState(() => value = _passwordCtl.text);
                         },
@@ -115,7 +121,8 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.done,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        onEditingComplete: () => FocusScope.of(context).unfocus(),
+                        onEditingComplete: () =>
+                            FocusScope.of(context).unfocus(),
                         onChanged: (value) {
                           setState(() => value = _confirmPasswordCtl.text);
                         },
@@ -146,11 +153,17 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
             ),
             PrimaryButton(
               title: 'Konfirmasi',
-              onPressed: () {},
+              onPressed: _onConfirmButtonPressed,
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _onConfirmButtonPressed() {
+    if (_formKey.currentState!.validate()) {
+      _navService.pushTo(MorphRoute.main);
+    }
   }
 }

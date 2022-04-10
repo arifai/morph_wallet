@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 @immutable
 abstract class MorpthState {}
 
-class AppInitial extends MorpthState {
+class AppInitialization extends MorpthState {
   @override
-  String toString() => 'App initialization';
+  String toString() => 'AppInitialization';
 }
 
-class AuthenticationLoading extends MorpthState {
+class WalletLoading extends MorpthState {
   @override
-  String toString() => 'AuthenticationLoading';
+  String toString() => 'WalletLoading';
 }

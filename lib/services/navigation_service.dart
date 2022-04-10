@@ -15,8 +15,17 @@ class NavigationService {
         .pushNamed(routeName, arguments: arguments);
   }
 
-  Future<dynamic> moveTo(String routeName, {Object? arguments, Object? result}) {
+  Future<dynamic> moveTo(String routeName,
+      {Object? arguments, Object? result}) {
     return _navigationKey.currentState!
         .pushReplacementNamed(routeName, arguments: arguments, result: result);
+  }
+
+  Future<dynamic> pushTo(String routeName, {Object? arguments}) {
+    return _navigationKey.currentState!.pushNamedAndRemoveUntil(
+      routeName,
+      (route) => false,
+      arguments: arguments,
+    );
   }
 }

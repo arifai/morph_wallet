@@ -5,10 +5,15 @@ class PrimaryButton extends StatelessWidget {
   final Function()? onPressed;
   final String title;
   final MaterialStateProperty<Size?>? fixedSize;
+  final double borderRadius;
 
-  const PrimaryButton(
-      {Key? key, this.onPressed, required this.title, this.fixedSize})
-      : super(key: key);
+  const PrimaryButton({
+    Key? key,
+    this.onPressed,
+    required this.title,
+    this.fixedSize,
+    this.borderRadius = 8.0,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +30,11 @@ class PrimaryButton extends StatelessWidget {
                 SizeConfig.blockSizeHorizontal * 13,
               ),
             ),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+        ),
       ),
     );
   }

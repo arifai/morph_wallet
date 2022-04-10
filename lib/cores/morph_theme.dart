@@ -8,14 +8,30 @@ class MorphTheme {
     final originalTextTheme = ThemeData.dark().textTheme;
 
     return ThemeData().copyWith(
+      hoverColor: Colors.transparent,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: MorphColor.darkColor,
       primaryColor: MorphColor.primaryColor,
       errorColor: MorphColor.errorColor,
       visualDensity: VisualDensity.adaptivePlatformDensity,
+      listTileTheme: const ListTileThemeData(style: ListTileStyle.list),
       iconTheme: const IconThemeData(
         color: MorphColor.whiteColor,
         size: 23.0,
+      ),
+      tabBarTheme: TabBarTheme(
+        unselectedLabelColor: MorphColor.greyColor,
+        indicatorSize: TabBarIndicatorSize.tab,
+        labelPadding: const EdgeInsets.symmetric(horizontal: 3.5),
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: MorphColor.secondaryDarkColor,
+        ),
+        labelStyle: const TextStyle(
+          color: MorphColor.whiteColor,
+          fontSize: 15.0,
+          fontWeight: FontWeight.w500,
+        ),
       ),
       appBarTheme: const AppBarTheme(
         elevation: 0.0,
@@ -57,9 +73,9 @@ class MorphTheme {
           backgroundColor: MaterialStateProperty.all(MorphColor.primaryColor),
           shadowColor: MaterialStateProperty.all(Colors.transparent),
           overlayColor: MaterialStateProperty.all(Colors.transparent),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          ),
+          // shape: MaterialStateProperty.all(
+          //   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          // ),
           textStyle: MaterialStateProperty.all(
             const TextStyle(
               fontFamily: 'Inter',

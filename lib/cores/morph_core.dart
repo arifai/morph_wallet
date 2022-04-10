@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Morph wallet routes.
 class MorphRoute {
+  static const main = '/main_screen';
   static const onboarding = '/onboarding_screen';
   static const createWallet = '/create_wallet_screen';
   static const importWallet = '/import_wallet_screen';
@@ -19,6 +20,8 @@ class MorphKey {
   static const onboardingKey = Key('__onboarding_screen__');
   static const createWalletKey = Key('__create_wallet_screen__');
   static const importWalletKey = Key('__import_wallet_screen__');
+  static const walletKey = Key('__wallet_screen__');
+  static const collectionKey = Key('__collection_screen__');
 }
 
 /// Morph wallet colors pallet.
