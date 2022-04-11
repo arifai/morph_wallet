@@ -12,24 +12,24 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-  late TabController _controller;
+  late TabController _tabController;
   late int _selectedIndex = 0;
 
   @override
   void initState() {
-    _controller = TabController(length: 2, vsync: this);
-    _controller.addListener(_tabListener);
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_tabListener);
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_tabListener);
+    _tabController.removeListener(_tabListener);
     super.dispose();
   }
 
   void _tabListener() {
-    setState(() => _selectedIndex = _controller.index);
+    setState(() => _selectedIndex = _tabController.index);
   }
 
   @override
@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       appBar: AppBar(
         centerTitle: true,
         title: TabBar(
-          controller: _controller,
+          controller: _tabController,
           tabs: const [
             Tab(text: 'Token', height: 30.0),
             Tab(text: 'Koleksi', height: 30.0),
@@ -53,7 +53,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         ],
       ),
       body: TabBarView(
-        controller: _controller,
+        controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
         children: const [
           WalletScreen(key: MorphKey.walletKey),

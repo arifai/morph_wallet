@@ -116,6 +116,7 @@ class MorphTheme {
       dividerTheme: const DividerThemeData(
         color: MorphColor.secondaryDarkColor,
         thickness: 1.5,
+        space: 1,
       ),
       textTheme: originalTextTheme.apply(
         fontFamily: 'Inter',

@@ -13,7 +13,7 @@ class WalletScreen extends StatefulWidget {
 }
 
 class _WalletScreenState extends State<WalletScreen> {
-  final ScrollController _scrollCtl = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   final List<Token> _tokens = [
     Token(
       'https://s2.coinmarketcap.com/static/img/coins/200x200/5426.png',
@@ -35,18 +35,18 @@ class _WalletScreenState extends State<WalletScreen> {
 
   @override
   void initState() {
-    _scrollCtl.addListener(_scrollListener);
+    _scrollController.addListener(_scrollListener);
     super.initState();
   }
 
   @override
   void dispose() {
-    _scrollCtl.removeListener(_scrollListener);
+    _scrollController.removeListener(_scrollListener);
     super.dispose();
   }
 
   void _scrollListener() {
-    final _scrollPosition = _scrollCtl.position;
+    final _scrollPosition = _scrollController.position;
 
     if (_scrollPosition.pixels == _scrollPosition.maxScrollExtent) {
       debugPrint('Load more tokens...');
@@ -60,7 +60,7 @@ class _WalletScreenState extends State<WalletScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 30.0),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
@@ -114,51 +114,47 @@ class _WalletScreenState extends State<WalletScreen> {
             ),
           ),
           const Divider(),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 10.0,
-              left: 10.0,
-              right: 10.0,
-            ),
-            // FIXME: [ClampingScrollPhysics] not working for [ListView]
-            child: ListView.builder(
-              controller: _scrollCtl,
-              itemCount: _tokens.length,
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
-              itemBuilder: (_, index) {
-                var token = _tokens[index];
+          Flexible(
+            child: RefreshIndicator(
+              displacement: 10.0,
+              onRefresh: () async {
+                await Future.delayed(const Duration(seconds: 2));
+              },
+              child: ListView.builder(
+                // FIXME: ScrollController doesn't work
+                controller: _scrollController,
+                itemCount: _tokens.length,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemBuilder: (_, index) {
+                  var token = _tokens[index];
 
-                return ListTile(
-                  key: ValueKey('__${token.ticker}_${index}__'),
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(token.imageUrl),
-                    radius: 20.0,
-                    backgroundColor: MorphColor.greyColor,
-                  ),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        token.ticker,
-                        style: const TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                      Flexible(
-                        child: Text(
+                  return ListTile(
+                    key: ValueKey('__${token.ticker}_${index}__'),
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(token.imageUrl),
+                      radius: 20.0,
+                      backgroundColor: MorphColor.greyColor,
+                    ),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          token.ticker,
+                          style: const TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                        Text(
                           token.balance.toString(),
                           maxLines: 1,
                           textAlign: TextAlign.end,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontWeight: FontWeight.w500),
                         ),
-                      ),
-                    ],
-                  ),
-                  subtitle: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: RichText(
+                      ],
+                    ),
+                    subtitle: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RichText(
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           text: TextSpan(
@@ -170,17 +166,14 @@ class _WalletScreenState extends State<WalletScreen> {
                             ),
                             children: [
                               TextSpan(
-                                // I don't know 'white space' unicode in Flutter
-                                text: '   ${token.priceChanges}',
+                                text: '\u{2002}\u{2002}${token.priceChanges}',
                                 style: const TextStyle(
                                     color: MorphColor.errorColor),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                      Flexible(
-                        child: Text(
+                        Text(
                           '${token.toIDRBalance}'.toIdr(),
                           maxLines: 1,
                           textAlign: TextAlign.end,
@@ -190,11 +183,11 @@ class _WalletScreenState extends State<WalletScreen> {
                             color: MorphColor.greyColor,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],
