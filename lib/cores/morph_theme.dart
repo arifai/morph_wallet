@@ -9,6 +9,9 @@ class MorphTheme {
 
     return ThemeData().copyWith(
       hoverColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      shadowColor: Colors.transparent,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: MorphColor.darkColor,
       primaryColor: MorphColor.primaryColor,
@@ -18,6 +21,16 @@ class MorphTheme {
       iconTheme: const IconThemeData(
         color: MorphColor.whiteColor,
         size: 23.0,
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        elevation: 0,
+        type: BottomNavigationBarType.fixed,
+        // showSelectedLabels: false, FIXME: Not working
+        showUnselectedLabels: false,
+        selectedLabelStyle: TextStyle(fontSize: 11.3),
+        selectedItemColor: MorphColor.primaryColor,
+        unselectedItemColor: MorphColor.greyColor,
+        backgroundColor: MorphColor.darkColor,
       ),
       tabBarTheme: TabBarTheme(
         unselectedLabelColor: MorphColor.greyColor,
@@ -50,7 +63,6 @@ class MorphTheme {
           elevation: MaterialStateProperty.all(0.0),
           backgroundColor:
               MaterialStateProperty.all(MorphColor.secondaryDarkColor),
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
           overlayColor: MaterialStateProperty.all(Colors.transparent),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
@@ -71,11 +83,7 @@ class MorphTheme {
         style: ButtonStyle(
           elevation: MaterialStateProperty.all(0.0),
           backgroundColor: MaterialStateProperty.all(MorphColor.primaryColor),
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
           overlayColor: MaterialStateProperty.all(Colors.transparent),
-          // shape: MaterialStateProperty.all(
-          //   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          // ),
           textStyle: MaterialStateProperty.all(
             const TextStyle(
               fontFamily: 'Inter',

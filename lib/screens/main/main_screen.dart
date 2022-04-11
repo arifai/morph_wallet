@@ -14,6 +14,14 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late TabController _tabController;
   late int _selectedIndex = 0;
+  late int _selectedNavItem = 0;
+  final List<NavBarItem> _navIcons = [
+    NavBarItem(Icons.account_balance_wallet_rounded, 'Dompet'),
+    NavBarItem(Icons.swap_horiz_rounded, 'Tukar'),
+    NavBarItem(Icons.language_rounded, 'DApps'),
+    NavBarItem(Icons.class__rounded, 'Berita'),
+    NavBarItem(Icons.settings_rounded, 'Pengaturan')
+  ];
 
   @override
   void initState() {
@@ -30,6 +38,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   void _tabListener() {
     setState(() => _selectedIndex = _tabController.index);
+  }
+
+  void _onNavItemTapped(int index) {
+    setState(() => _selectedNavItem = index);
   }
 
   @override
@@ -60,6 +72,20 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           CollectionScreen(key: MorphKey.collectionKey),
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedNavItem,
+        onTap: _onNavItemTapped,
+        items: _navIcons
+            .map((e) => BottomNavigationBarItem(icon: Icon(e.icon), label: e.label))
+            .toList(),
+      ),
     );
   }
+}
+
+class NavBarItem {
+  final IconData icon;
+  final String label;
+
+  NavBarItem(this.icon, this.label);
 }
