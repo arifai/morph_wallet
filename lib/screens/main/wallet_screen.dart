@@ -14,6 +14,7 @@ class WalletScreen extends StatefulWidget {
 
 class _WalletScreenState extends State<WalletScreen> {
   final ScrollController _scrollController = ScrollController();
+  late double _totalEstimateAssets = 0;
   final List<Token> _tokens = [
     Token(
       'https://s2.coinmarketcap.com/static/img/coins/200x200/5426.png',
@@ -36,6 +37,7 @@ class _WalletScreenState extends State<WalletScreen> {
   @override
   void initState() {
     _scrollController.addListener(_scrollListener);
+    _calEstTotalAssets();
     super.initState();
   }
 
@@ -50,6 +52,13 @@ class _WalletScreenState extends State<WalletScreen> {
 
     if (_scrollPosition.pixels == _scrollPosition.maxScrollExtent) {
       debugPrint('Load more tokens...');
+    }
+  }
+
+  // Calculate estimate total assets (to IDR balance)
+  void _calEstTotalAssets() {
+    for (var e in _tokens) {
+      _totalEstimateAssets += (e.toIDRBalance);
     }
   }
 
@@ -74,7 +83,7 @@ class _WalletScreenState extends State<WalletScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
             child: Text(
-              '2483383.37'.toIdr(),
+              '$_totalEstimateAssets'.toIdr(),
               maxLines: 1,
               style: const TextStyle(
                 fontSize: 27.0,
