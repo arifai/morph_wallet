@@ -125,6 +125,7 @@ class _WalletScreenState extends State<WalletScreen> {
           const Divider(),
           Flexible(
             child: RefreshIndicator(
+              color: MorphColor.primaryColor,
               displacement: 10.0,
               onRefresh: () async {
                 await Future.delayed(const Duration(seconds: 2));
