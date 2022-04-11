@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:morph_wallet/cores/morph_core.dart';
 import 'package:morph_wallet/models/token/token.dart';
 import 'package:morph_wallet/size_config.dart';
 import 'package:morph_wallet/utils/string_extension.dart';
 import 'package:morph_wallet/widgets/buttons/primary_button.dart';
+import 'package:morph_wallet/widgets/commons/morph_color.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({Key? key}) : super(key: key);

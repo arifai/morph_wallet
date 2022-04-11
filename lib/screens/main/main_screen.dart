@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
 import 'package:morph_wallet/screens/main/collection_screen.dart';
 import 'package:morph_wallet/screens/main/wallet_screen.dart';
+import 'package:morph_wallet/widgets/commons/morph_icon.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -16,11 +17,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late int _selectedIndex = 0;
   late int _selectedNavItem = 0;
   final List<NavBarItem> _navIcons = [
-    NavBarItem(Icons.account_balance_wallet_rounded, 'Dompet'),
-    NavBarItem(Icons.swap_horiz_rounded, 'Tukar'),
-    NavBarItem(Icons.language_rounded, 'DApps'),
-    NavBarItem(Icons.class__rounded, 'Berita'),
-    NavBarItem(Icons.settings_rounded, 'Pengaturan')
+    NavBarItem(MorphIcon.wallet, 'Dompet'),
+    NavBarItem(MorphIcon.arrow_swap, 'Tukar'),
+    NavBarItem(MorphIcon.globe, 'DApps'),
+    NavBarItem(MorphIcon.book_coin, 'Berita'),
+    NavBarItem(MorphIcon.settings, 'Pengaturan')
   ];
 
   @override
@@ -76,7 +77,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         currentIndex: _selectedNavItem,
         onTap: _onNavItemTapped,
         items: _navIcons
-            .map((e) => BottomNavigationBarItem(icon: Icon(e.icon), label: e.label))
+            .map((e) =>
+                BottomNavigationBarItem(icon: Icon(e.icon), label: e.label))
             .toList(),
       ),
     );

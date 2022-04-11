@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:morph_wallet/cores/morph_core.dart';
 import 'package:morph_wallet/size_config.dart';
+import 'package:morph_wallet/widgets/commons/morph_color.dart';
 
 class SecondaryButton extends StatelessWidget {
   final Function()? onPressed;

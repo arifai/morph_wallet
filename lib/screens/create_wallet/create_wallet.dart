@@ -5,6 +5,8 @@ import 'package:morph_wallet/cores/morph_core.dart';
 import 'package:morph_wallet/services/navigation_service.dart';
 import 'package:morph_wallet/size_config.dart';
 import 'package:morph_wallet/widgets/buttons/primary_button.dart';
+import 'package:morph_wallet/widgets/commons/morph_color.dart';
+import 'package:morph_wallet/widgets/commons/morph_icon.dart';
 import 'package:morph_wallet/widgets/mnemonic/mnemonic_widget.dart';
 import 'package:morph_wallet/widgets/commons/warning_widget.dart';
 
@@ -46,7 +48,7 @@ class CreateWallet extends StatelessWidget {
                   ),
                   TextButton.icon(
                     icon: const Icon(
-                      Icons.copy_rounded,
+                      MorphIcon.document_multiple,
                       color: MorphColor.whiteColor,
                     ),
                     label: Text(

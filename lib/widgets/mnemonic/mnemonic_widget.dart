@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:morph_wallet/cores/morph_core.dart';
+import 'package:morph_wallet/widgets/commons/morph_color.dart';
 
 class MnemonicWidget extends StatelessWidget {
   final List<String> mnemonic;
