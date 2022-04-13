@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:morph_wallet/blocs/bottom_navbar/bottom_navbar_bloc.dart';
 import 'package:morph_wallet/blocs/create_wallet/create_wallet_bloc.dart';
 import 'package:morph_wallet/blocs/morph/morph_bloc.dart';
+import 'package:morph_wallet/blocs/nft/nft_bloc.dart';
+import 'package:morph_wallet/blocs/nft/nft_event.dart';
 import 'package:morph_wallet/blocs/token/token_bloc.dart';
 import 'package:morph_wallet/blocs/token/token_event.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
@@ -47,6 +49,8 @@ class RouteGenerator {
               BlocProvider<TokenBloc>(
                 create: (_) => TokenBloc()..add(LoadListToken()),
               ),
+              BlocProvider<NftBloc>(
+                  create: (_) => NftBloc()..add(LoadListNft())),
             ],
             child: const MainScreen(),
           ),

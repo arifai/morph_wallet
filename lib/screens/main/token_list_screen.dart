@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:morph_wallet/blocs/token/token_bloc.dart';
@@ -119,12 +120,10 @@ class _TokenListScreenState extends State<TokenListScreen> {
                     color: MorphColor.primaryColor,
                     displacement: 10.0,
                     onRefresh: () async {
-                      await Future.delayed(const Duration(seconds: 2)).then(
-                        (_) => _tokenBloc.add(LoadListToken()),
-                      );
+                      await Future.delayed(const Duration(seconds: 2))
+                          .then((_) => _tokenBloc.add(LoadListToken()));
                     },
                     child: ListView.builder(
-                      // FIXME: ScrollController doesn't work
                       controller: _scrollController,
                       itemCount: tokens.length,
                       physics: const AlwaysScrollableScrollPhysics(),
@@ -133,10 +132,15 @@ class _TokenListScreenState extends State<TokenListScreen> {
 
                         return ListTile(
                           key: ValueKey('__${token.ticker}_${index}__'),
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(token.imageUrl),
-                            radius: 20.0,
-                            backgroundColor: MorphColor.greyColor,
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(50.0),
+                            child: CachedNetworkImage(
+                              placeholder: (context, url) => const Text('...'),
+                              imageUrl: token.imageUrl,
+                              fit: BoxFit.cover,
+                              height: 40.0,
+                              width: 40.0,
+                            ),
                           ),
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,7 +148,8 @@ class _TokenListScreenState extends State<TokenListScreen> {
                               Text(
                                 token.ticker,
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.w500),
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                               Text(
                                 token.balance.toString(),
@@ -152,7 +157,8 @@ class _TokenListScreenState extends State<TokenListScreen> {
                                 textAlign: TextAlign.end,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.w500),
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ],
                           ),
@@ -174,7 +180,8 @@ class _TokenListScreenState extends State<TokenListScreen> {
                                       text:
                                           '\u{2002}\u{2002}${token.priceChanges}',
                                       style: const TextStyle(
-                                          color: MorphColor.errorColor),
+                                        color: MorphColor.errorColor,
+                                      ),
                                     ),
                                   ],
                                 ),
