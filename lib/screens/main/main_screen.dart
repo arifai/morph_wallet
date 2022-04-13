@@ -5,8 +5,8 @@ import 'package:morph_wallet/blocs/bottom_navbar/bottom_navbar_event.dart';
 import 'package:morph_wallet/blocs/bottom_navbar/bottom_navbar_item.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
 import 'package:morph_wallet/screens/empty/empty_screen.dart';
-import 'package:morph_wallet/screens/main/collectible_screen.dart';
-import 'package:morph_wallet/screens/main/token_screen.dart';
+import 'package:morph_wallet/screens/main/collectible_list_screen.dart';
+import 'package:morph_wallet/screens/main/token_list_screen.dart';
 import 'package:morph_wallet/widgets/navbar/navbar.dart';
 
 class MainScreen extends StatefulWidget {
@@ -29,8 +29,8 @@ class _MainScreenState extends State<MainScreen> {
           body = const TabBarView(
             physics: NeverScrollableScrollPhysics(),
             children: [
-              TokenScreen(key: MorphKey.tokenKey),
-              CollectibleScreen(key: MorphKey.collectibleKey),
+              TokenListScreen(key: MorphKey.tokenKey),
+              CollectibleListScreen(key: MorphKey.collectibleKey),
             ],
           );
         } else {

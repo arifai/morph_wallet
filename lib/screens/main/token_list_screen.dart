@@ -10,14 +10,14 @@ import 'package:morph_wallet/widgets/buttons/primary_button.dart';
 import 'package:morph_wallet/widgets/commons/loading.dart';
 import 'package:morph_wallet/widgets/commons/morph_color.dart';
 
-class TokenScreen extends StatefulWidget {
-  const TokenScreen({Key? key}) : super(key: key);
+class TokenListScreen extends StatefulWidget {
+  const TokenListScreen({Key? key}) : super(key: key);
 
   @override
-  State<TokenScreen> createState() => _TokenScreenState();
+  State<TokenListScreen> createState() => _TokenListScreenState();
 }
 
-class _TokenScreenState extends State<TokenScreen> {
+class _TokenListScreenState extends State<TokenListScreen> {
   final ScrollController _scrollController = ScrollController();
   late double _totalEstimateAssets = 0;
 
