@@ -1,0 +1,1 @@
+enum BottomNavbarItem { wallet, swap, dApps, news, settings }

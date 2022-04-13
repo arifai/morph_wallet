@@ -6,14 +6,18 @@ import 'package:morph_wallet/blocs/morph/morph_bloc.dart';
 import 'package:morph_wallet/blocs/morph/morph_event.dart';
 import 'package:morph_wallet/blocs/simple_bloc_observer.dart';
 import 'package:morph_wallet/cores/locator.dart';
+import 'package:morph_wallet/cores/morph_core.dart';
 import 'package:morph_wallet/cores/morph_theme.dart';
-import 'package:morph_wallet/route_generator.dart';
-import 'package:morph_wallet/screens/onboarding/onboarding_screen.dart';
+import 'package:morph_wallet/cores/route_generator.dart';
+import 'package:morph_wallet/repositories/account/account_repository.dart';
 import 'package:morph_wallet/services/navigation_service.dart';
 
 void main() {
   // Setup locator
   setupLocator();
+
+  // Account repository
+  final AccountRepository accountRepository = AccountRepository();
 
   // Widgets binding
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,13 +36,9 @@ void main() {
       DeviceOrientation.portraitDown,
     ]).then(
       (_) => runApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<MorphBloc>(
-              create: (_) => MorphBloc()..add(StartupEvent()),
-            ),
-          ],
-          child: const MorphWalletApp(),
+        BlocProvider<MorphBloc>(
+          create: (_) => MorphBloc(accountRepository)..add(StartupEvent()),
+          child: MorphWalletApp(accountRepository: accountRepository),
         ),
       ),
     );
@@ -46,7 +46,9 @@ void main() {
 }
 
 class MorphWalletApp extends StatelessWidget {
-  const MorphWalletApp({Key? key}) : super(key: key);
+  final AccountRepository accountRepository;
+  const MorphWalletApp({Key? key, required this.accountRepository})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +59,9 @@ class MorphWalletApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
       darkTheme: MorphTheme.applyDarkMode,
       navigatorKey: locator<NavigationService>().navigationKey,
+      initialRoute: MorphRoute.onboarding,
       onGenerateRoute: (settings) =>
-          RouteGenerator(settings, _morphBloc).generate(),
-      home: const OnboardingScreen(),
+          RouteGenerator(settings, _morphBloc, accountRepository).generate(),
     );
   }
 }

@@ -1,24 +1,40 @@
 class Account {
-  final String name;
-  final String publicKey;
-  final Mnemonic mnemonic;
-  final String password;
-  // SOL balance
-  final double lamports;
-  final double idrBalance;
+  final int? id;
+  final String? name;
+  final String? mnemonic;
+  final String? password;
+  final double? lamports;
+  final double? idrBalance;
 
-  Account({
-    required this.name,
-    required this.publicKey,
-    required this.mnemonic,
-    required this.password,
-    this.lamports = 0,
-    this.idrBalance = 0,
-  });
-}
+  Account(
+    this.id,
+    this.name,
+    this.mnemonic,
+    this.password,
+    this.lamports,
+    this.idrBalance,
+  );
 
-class Mnemonic {
-  final String mnemonic;
+  static Account fromJson(Map<String, dynamic> data) {
+    return Account(
+      data['id'] as int,
+      data['name'] as String,
+      data['mnemonic'] as String,
+      data['password'] as String,
+      data['lamports'] as double,
+      data['idr_balance'] as double,
+    );
+  }
 
-  Mnemonic(this.mnemonic);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['mnemonic'] = mnemonic;
+    data['password'] = password;
+    data['lamports'] = lamports;
+    data['idr_balance'] = idrBalance;
+
+    return data;
+  }
 }

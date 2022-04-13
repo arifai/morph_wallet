@@ -21,5 +21,11 @@ class MorphKey {
   static const createWalletKey = Key('__create_wallet_screen__');
   static const importWalletKey = Key('__import_wallet_screen__');
   static const walletKey = Key('__wallet_screen__');
-  static const collectionKey = Key('__collection_screen__');
+  static const tokenKey = Key('__token_screen__');
+  static const collectibleKey = Key('__collectible_screen__');
+  static const swapKey = Key('__swap_screen__');
+  static const dAppsKey = Key('__dapps_screen__');
+  static const newsKey = Key('__news_screen__');
+  static const settingsKey = Key('__settings_screen__');
+  static const navbarKey = Key('__navbar_widget__');
 }

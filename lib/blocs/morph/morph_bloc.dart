@@ -1,11 +1,23 @@
 import 'package:bloc/bloc.dart';
 import 'package:morph_wallet/blocs/morph/morph_event.dart';
 import 'package:morph_wallet/blocs/morph/morph_state.dart';
+import 'package:morph_wallet/repositories/account/account_repository.dart';
 
 class MorphBloc extends Bloc<MorphEvent, MorpthState> {
+  final AccountRepository accountRepository;
   static MorpthState get initialState => AppInitialization();
 
-  MorphBloc() : super(initialState) {
-    on<StartupEvent>((event, emit) => emit(WalletLoading()));
+  MorphBloc(this.accountRepository) : super(MorphBloc.initialState) {
+    on<StartupEvent>((event, emit) async {
+      emit(WalletLoading());
+
+      final bool hasAccount = await accountRepository.hasAccount();
+
+      if (hasAccount) {
+        emit(HasAnAccount());
+      } else {
+        emit(CreateOrImportFirst());
+      }
+    });
   }
 }

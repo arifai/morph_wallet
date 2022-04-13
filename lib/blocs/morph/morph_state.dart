@@ -12,3 +12,13 @@ class WalletLoading extends MorpthState {
   @override
   String toString() => 'WalletLoading';
 }
+
+class CreateOrImportFirst extends MorpthState {
+  @override
+  String toString() => 'CreateOrImportFirst';
+}
+
+class HasAnAccount extends MorpthState {
+  @override
+  String toString() => 'HasAnAccount';
+}
