@@ -1,10 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:morph_wallet/blocs/nft/nft_bloc.dart';
 import 'package:morph_wallet/blocs/nft/nft_event.dart';
 import 'package:morph_wallet/blocs/nft/nft_state.dart';
 import 'package:morph_wallet/screens/empty/empty_screen.dart';
+import 'package:morph_wallet/widgets/collectibles/collectible_image_widget.dart';
 import 'package:morph_wallet/widgets/commons/loading.dart';
 import 'package:morph_wallet/widgets/commons/morph_color.dart';
 
@@ -36,7 +36,6 @@ class _CollectibleListScreenState extends State<CollectibleListScreen> {
           },
           child: GridView.builder(
             itemCount: nfts.length,
-            shrinkWrap: true,
             padding: const EdgeInsets.all(20.0),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
@@ -45,14 +44,7 @@ class _CollectibleListScreenState extends State<CollectibleListScreen> {
             ),
             itemBuilder: (_, idx) => Stack(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: CachedNetworkImage(
-                    placeholder: (context, url) => const Text('...'),
-                    imageUrl: nfts[idx].imgUrl,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                CollectibleImageWidget(imgUrl: nfts[idx].imgUrl),
                 Positioned(
                   height: 30.0,
                   bottom: 5.0,
