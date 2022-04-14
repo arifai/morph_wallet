@@ -15,20 +15,23 @@ class WarningWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Padding(
-              padding: EdgeInsets.only(right: 8.0),
+              padding: EdgeInsets.only(right: 10.0, left: 5.0),
               child: Icon(
                 Icons.info_outline,
                 color: MorphColor.yellowColor,
               ),
             ),
             Flexible(
-              child: Text(
-                text,
-                style: const TextStyle(
-                  color: MorphColor.yellowColor,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 5.0),
+                child: Text(
+                  text,
+                  style: const TextStyle(
+                    color: MorphColor.yellowColor,
+                  ),
                 ),
               ),
             ),
