@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:morph_wallet/blocs/token/token_bloc.dart';
 import 'package:morph_wallet/blocs/token/token_event.dart';
@@ -9,7 +10,10 @@ import 'package:morph_wallet/screens/empty/empty_screen.dart';
 import 'package:morph_wallet/utils/string_extension.dart';
 import 'package:morph_wallet/widgets/buttons/primary_button.dart';
 import 'package:morph_wallet/widgets/commons/loading.dart';
+import 'package:morph_wallet/widgets/commons/modal_bottom_sheet.dart';
 import 'package:morph_wallet/widgets/commons/morph_color.dart';
+import 'package:morph_wallet/widgets/commons/warning_widget.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class TokenListScreen extends StatefulWidget {
   const TokenListScreen({Key? key}) : super(key: key);
@@ -21,6 +25,7 @@ class TokenListScreen extends StatefulWidget {
 class _TokenListScreenState extends State<TokenListScreen> {
   final ScrollController _scrollController = ScrollController();
   late double _totalEstimateAssets = 0;
+  var address = '51cbXxXHtwQ5WCSVkmjBrUcbZQUJjCWxvXP4mmoJiJGA';
 
   @override
   void initState() {
@@ -109,7 +114,7 @@ class _TokenListScreenState extends State<TokenListScreen> {
                             SizeConfig.blockSizeHorizontal * 10,
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: _onReceiveButtonPressed,
                       ),
                     ],
                   ),
@@ -211,5 +216,40 @@ class _TokenListScreenState extends State<TokenListScreen> {
         },
       ),
     );
+  }
+
+  void _onReceiveButtonPressed() {
+    modalBottomSheet(
+      context: context,
+      title: const WarningWidget(text: 'Hanya mendukung aset terkait SOL.'),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20.0, top: 20.0),
+            child: QrImage(
+              data: address,
+              size: 170.0,
+              semanticsLabel: address,
+              backgroundColor: MorphColor.whiteColor,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: Text(
+              address,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
+      bottomContent: PrimaryButton(
+        title: 'Salin Alamat',
+        onPressed: _onCopyButtonPressed,
+      ),
+    );
+  }
+
+  void _onCopyButtonPressed() {
+    Clipboard.setData(ClipboardData(text: address));
   }
 }
