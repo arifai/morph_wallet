@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:morph_wallet/cores/locator.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
 import 'package:morph_wallet/services/navigation_service.dart';
-import 'package:morph_wallet/utils/mnemonic_util.dart';
+import 'package:morph_wallet/services/wallet_service.dart';
 import 'package:morph_wallet/widgets/buttons/primary_button.dart';
 import 'package:morph_wallet/widgets/buttons/secondary_button.dart';
 
@@ -12,7 +12,7 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final NavigationService _navService = locator<NavigationService>();
-    List<String> mnemonic = MnemonicUtil.generate();
+    List<String> mnemonic = WalletService().generetaMnemonic();
 
     void _onCreateButtonPressed() {
       _navService.navigateTo(MorphRoute.createWallet, arguments: mnemonic);

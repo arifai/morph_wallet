@@ -4,6 +4,7 @@ import 'package:morph_wallet/blocs/bottom_navbar/bottom_navbar_bloc.dart';
 import 'package:morph_wallet/blocs/bottom_navbar/bottom_navbar_event.dart';
 import 'package:morph_wallet/blocs/bottom_navbar/bottom_navbar_item.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
+import 'package:morph_wallet/models/wallet_account/wallet_account.dart';
 import 'package:morph_wallet/screens/empty/empty_screen.dart';
 import 'package:morph_wallet/screens/collectible/collectible_list_screen.dart';
 import 'package:morph_wallet/screens/token/token_list_screen.dart';
@@ -17,6 +18,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  late WalletAccount walletAccount;
+
   @override
   Widget build(BuildContext context) {
     final _bottomNavbarBloc = BlocProvider.of<BottomNavbarBloc>(context);
@@ -26,11 +29,14 @@ class _MainScreenState extends State<MainScreen> {
         Widget body;
 
         if (currentNavItem == BottomNavbarItem.wallet) {
-          body = const TabBarView(
-            physics: NeverScrollableScrollPhysics(),
+          body = TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
             children: [
-              TokenListScreen(key: MorphKey.tokenKey),
-              CollectibleListScreen(key: MorphKey.collectibleKey),
+              TokenListScreen(
+                key: MorphKey.tokenKey,
+                walletAccount: walletAccount,
+              ),
+              const CollectibleListScreen(key: MorphKey.collectibleKey),
             ],
           );
         } else {

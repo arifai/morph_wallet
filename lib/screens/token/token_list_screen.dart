@@ -6,6 +6,7 @@ import 'package:morph_wallet/blocs/token/token_bloc.dart';
 import 'package:morph_wallet/blocs/token/token_event.dart';
 import 'package:morph_wallet/blocs/token/token_state.dart';
 import 'package:morph_wallet/cores/size_config.dart';
+import 'package:morph_wallet/models/wallet_account/wallet_account.dart';
 import 'package:morph_wallet/screens/empty/empty_screen.dart';
 import 'package:morph_wallet/utils/string_extension.dart';
 import 'package:morph_wallet/widgets/buttons/primary_button.dart';
@@ -16,7 +17,10 @@ import 'package:morph_wallet/widgets/commons/warning_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TokenListScreen extends StatefulWidget {
-  const TokenListScreen({Key? key}) : super(key: key);
+  final WalletAccount walletAccount;
+
+  const TokenListScreen({Key? key, required this.walletAccount})
+      : super(key: key);
 
   @override
   State<TokenListScreen> createState() => _TokenListScreenState();
@@ -25,7 +29,6 @@ class TokenListScreen extends StatefulWidget {
 class _TokenListScreenState extends State<TokenListScreen> {
   final ScrollController _scrollController = ScrollController();
   late double _totalEstimateAssets = 0;
-  var address = '51cbXxXHtwQ5WCSVkmjBrUcbZQUJjCWxvXP4mmoJiJGA';
 
   @override
   void initState() {
@@ -54,73 +57,73 @@ class _TokenListScreenState extends State<TokenListScreen> {
 
     return Padding(
       padding: const EdgeInsets.only(top: 30.0),
-      child: BlocBuilder<TokenBloc, TokenState>(
-        builder: (context, state) {
-          if (state is TokenListLoading) {
-            return const Loading();
-          } else if (state is TokenListLoaded) {
-            final tokens = state.tokens;
-
-            // Calculate estimate total assets (IDR)
-            _totalEstimateAssets =
-                tokens.map((e) => e.toIDRBalance).reduce((a, b) => a + b);
-
-            return Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            'ESTIMASI ASET',
+            style: TextStyle(
+              fontSize: 15.0,
+              color: MorphColor.greyColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+            child: Text(
+              '$_totalEstimateAssets'.toIdr(),
+              maxLines: 1,
+              style: const TextStyle(
+                fontSize: 27.0,
+                fontWeight: FontWeight.bold,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Text(
-                  'ESTIMASI ASET',
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    color: MorphColor.greyColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                  child: Text(
-                    '$_totalEstimateAssets'.toIdr(),
-                    maxLines: 1,
-                    style: const TextStyle(
-                      fontSize: 27.0,
-                      fontWeight: FontWeight.bold,
-                      overflow: TextOverflow.ellipsis,
+                PrimaryButton(
+                  title: 'Kirim',
+                  borderRadius: 25.0,
+                  fixedSize: MaterialStateProperty.all(
+                    Size(
+                      SizeConfig.blockSizeVertical * 17,
+                      SizeConfig.blockSizeHorizontal * 10,
                     ),
                   ),
+                  onPressed: () {},
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      PrimaryButton(
-                        title: 'Kirim',
-                        borderRadius: 25.0,
-                        fixedSize: MaterialStateProperty.all(
-                          Size(
-                            SizeConfig.blockSizeVertical * 17,
-                            SizeConfig.blockSizeHorizontal * 10,
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
-                      PrimaryButton(
-                        title: 'Terima',
-                        borderRadius: 25.0,
-                        fixedSize: MaterialStateProperty.all(
-                          Size(
-                            SizeConfig.blockSizeVertical * 17,
-                            SizeConfig.blockSizeHorizontal * 10,
-                          ),
-                        ),
-                        onPressed: _onReceiveButtonPressed,
-                      ),
-                    ],
+                PrimaryButton(
+                  title: 'Terima',
+                  borderRadius: 25.0,
+                  fixedSize: MaterialStateProperty.all(
+                    Size(
+                      SizeConfig.blockSizeVertical * 17,
+                      SizeConfig.blockSizeHorizontal * 10,
+                    ),
                   ),
+                  onPressed: _onReceiveButtonPressed,
                 ),
-                const Divider(),
-                Flexible(
+              ],
+            ),
+          ),
+          const Divider(),
+          BlocBuilder<TokenBloc, TokenState>(
+            builder: (_, state) {
+              if (state is TokenListLoading) {
+                return const Loading();
+              } else if (state is TokenListLoaded) {
+                final tokens = state.tokens;
+
+                // Calculate estimate total assets (IDR)
+                _totalEstimateAssets =
+                    tokens.map((e) => e.toIDRBalance).reduce((a, b) => a + b);
+
+                return Flexible(
                   child: RefreshIndicator(
                     color: MorphColor.primaryColor,
                     displacement: 10.0,
@@ -207,18 +210,20 @@ class _TokenListScreenState extends State<TokenListScreen> {
                       },
                     ),
                   ),
-                ),
-              ],
-            );
-          } else {
-            return const EmptyScreen(text: 'Unknown State');
-          }
-        },
+                );
+              } else {
+                return const EmptyScreen(text: 'Unknown State');
+              }
+            },
+          ),
+        ],
       ),
     );
   }
 
   void _onReceiveButtonPressed() {
+    final String _address = widget.walletAccount.address;
+
     modalBottomSheet(
       context: context,
       title: const WarningWidget(text: 'Hanya mendukung aset terkait SOL.'),
@@ -227,16 +232,16 @@ class _TokenListScreenState extends State<TokenListScreen> {
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0, top: 20.0),
             child: QrImage(
-              data: address,
+              data: _address,
               size: 170.0,
-              semanticsLabel: address,
+              semanticsLabel: _address,
               backgroundColor: MorphColor.whiteColor,
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
             child: Text(
-              address,
+              _address,
               textAlign: TextAlign.center,
             ),
           ),
@@ -244,12 +249,8 @@ class _TokenListScreenState extends State<TokenListScreen> {
       ),
       bottomContent: PrimaryButton(
         title: 'Salin Alamat',
-        onPressed: _onCopyButtonPressed,
+        onPressed: () => Clipboard.setData(ClipboardData(text: _address)),
       ),
     );
-  }
-
-  void _onCopyButtonPressed() {
-    Clipboard.setData(ClipboardData(text: address));
   }
 }

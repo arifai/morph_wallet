@@ -1,8 +1,10 @@
+import 'package:flutter/rendering.dart';
 import 'package:morph_wallet/cores/repo.dart';
-import 'package:morph_wallet/utils/crypto_util.dart';
+import 'package:morph_wallet/services/wallet_service.dart';
 
 class AccountRepository {
   static AccountRepository? _singleton;
+  late WalletService walletService;
   MorphRepo? repo;
 
   factory AccountRepository() {
@@ -19,25 +21,28 @@ class AccountRepository {
     required String name,
     required String mnemonic,
     required String password,
-  }) {
-    // debugPrint('{ $name, $mnemonic, $password }');
+  }) async {
+    await walletService.importWallet(mnemonic);
 
-    return repo!.putData('result', {
+    await repo!.putData('result', {
       'name': name,
-      'mnemonic': toHash(mnemonic),
-      'password': toHash(password),
+      'mnemonic': WalletService().encryptString(mnemonic),
+      'password': WalletService().encryptString(password),
     });
+
+    return;
   }
 
   Future<bool> hasAccount() async {
-    var account = await getAccount();
+    var accountName = await getWalletAccountName();
 
-    return account != null;
+    return accountName != null;
   }
 
-  Future<String?> getAccount() async {
+  Future<String?> getWalletAccountName() async {
     return await repo!.getData('result').then((value) {
-      // debugPrint(value!['name'].toString());
+      debugPrint('This account data: $value');
+
       if (value!.isNotEmpty) {
         return value['name'] as String;
       } else {

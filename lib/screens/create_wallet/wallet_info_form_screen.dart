@@ -5,6 +5,7 @@ import 'package:morph_wallet/blocs/create_wallet/create_wallet_event.dart';
 import 'package:morph_wallet/blocs/create_wallet/create_wallet_state.dart';
 import 'package:morph_wallet/cores/locator.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
+import 'package:morph_wallet/models/wallet_account/wallet_account.dart';
 import 'package:morph_wallet/services/navigation_service.dart';
 import 'package:morph_wallet/widgets/buttons/primary_button.dart';
 import 'package:morph_wallet/widgets/form/form_widget.dart';
@@ -25,8 +26,8 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
   final TextEditingController _passwordCtl = TextEditingController();
   final TextEditingController _confirmPasswordCtl = TextEditingController();
   final NavigationService _navService = locator<NavigationService>();
-  final _maxLength = 20;
-  var _textLength = 0;
+  final int _maxLength = 20;
+  int _textLength = 0;
   bool _isVisible = true;
 
   @override
@@ -81,8 +82,7 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
                                   '${_textLength.toString()}/${_maxLength.toString()}',
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               onEditingComplete: () =>
                                   FocusScope.of(context).nextFocus(),
                               onChanged: (value) {
@@ -105,8 +105,7 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
                               obscureText: _isVisible,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               onEditingComplete: () =>
                                   FocusScope.of(context).nextFocus(),
                               onChanged: (value) {
@@ -141,8 +140,7 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
                               obscureText: _isVisible,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.done,
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               onEditingComplete: () =>
                                   FocusScope.of(context).unfocus(),
                               onChanged: (value) {
@@ -191,8 +189,15 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
 
   void _onConfirmButtonPressed() {
     if (_formKey.currentState!.validate()) {
-      context.read<CreateWalletBloc>().add(CreateWalletButtonPressed(
-          _walletNameCtl.text.trim(), widget.mnemonic, _passwordCtl.text));
+      context.read<CreateWalletBloc>().add(
+            CreateWalletButtonPressed(
+              WalletAccount(
+                _walletNameCtl.text.trim(),
+                widget.mnemonic,
+                _passwordCtl.text,
+              ),
+            ),
+          );
     }
   }
 }

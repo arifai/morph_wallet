@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:morph_wallet/models/wallet_account/wallet_account.dart';
 
 @immutable
 abstract class CreateWalletEvent {}
 
 class CreateWalletButtonPressed extends CreateWalletEvent {
-  final String name;
-  final String mnemonic;
-  final String password;
+  final WalletAccount walletAccount;
 
-  CreateWalletButtonPressed(this.name, this.mnemonic, this.password);
+  CreateWalletButtonPressed(this.walletAccount);
 
   @override
   String toString() => 'CreateWalletButtonPressed';

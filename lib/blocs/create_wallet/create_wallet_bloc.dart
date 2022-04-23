@@ -14,9 +14,9 @@ class CreateWalletBloc extends Bloc<CreateWalletEvent, CreateWalletState> {
 
       try {
         accountRepository.create(
-          name: event.name,
-          mnemonic: event.mnemonic,
-          password: event.password,
+          name: event.walletAccount.name,
+          mnemonic: event.walletAccount.mnemonic,
+          password: event.walletAccount.password,
         );
 
         emit(CreateWalletSuccess());
