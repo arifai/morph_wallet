@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,8 +5,8 @@ import 'package:morph_wallet/blocs/token/token_bloc.dart';
 import 'package:morph_wallet/blocs/token/token_event.dart';
 import 'package:morph_wallet/blocs/token/token_state.dart';
 import 'package:morph_wallet/cores/size_config.dart';
-import 'package:morph_wallet/models/wallet_account/wallet_account.dart';
 import 'package:morph_wallet/screens/empty/empty_screen.dart';
+import 'package:morph_wallet/utils/bytes.dart';
 import 'package:morph_wallet/utils/string_extension.dart';
 import 'package:morph_wallet/widgets/buttons/primary_button.dart';
 import 'package:morph_wallet/widgets/commons/loading.dart';
@@ -17,10 +16,7 @@ import 'package:morph_wallet/widgets/commons/warning_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TokenListScreen extends StatefulWidget {
-  final WalletAccount walletAccount;
-
-  const TokenListScreen({Key? key, required this.walletAccount})
-      : super(key: key);
+  const TokenListScreen({Key? key}) : super(key: key);
 
   @override
   State<TokenListScreen> createState() => _TokenListScreenState();
@@ -29,10 +25,12 @@ class TokenListScreen extends StatefulWidget {
 class _TokenListScreenState extends State<TokenListScreen> {
   final ScrollController _scrollController = ScrollController();
   late double _totalEstimateAssets = 0;
+  late TokenBloc _tokenBloc;
 
   @override
   void initState() {
     _scrollController.addListener(_scrollListener);
+    _tokenBloc = context.read<TokenBloc>();
     super.initState();
   }
 
@@ -43,9 +41,9 @@ class _TokenListScreenState extends State<TokenListScreen> {
   }
 
   void _scrollListener() {
-    final _scrollPosition = _scrollController.position;
+    final scrollPosition = _scrollController.position;
 
-    if (_scrollPosition.pixels == _scrollPosition.maxScrollExtent) {
+    if (scrollPosition.pixels == scrollPosition.maxScrollExtent) {
       debugPrint('Load more tokens...');
     }
   }
@@ -53,7 +51,6 @@ class _TokenListScreenState extends State<TokenListScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final _tokenBloc = BlocProvider.of<TokenBloc>(context);
 
     return Padding(
       padding: const EdgeInsets.only(top: 30.0),
@@ -142,12 +139,11 @@ class _TokenListScreenState extends State<TokenListScreen> {
                           key: ValueKey('__${token.ticker}_${index}__'),
                           leading: ClipRRect(
                             borderRadius: BorderRadius.circular(50.0),
-                            child: CachedNetworkImage(
-                              placeholder: (context, url) => const Text('...'),
-                              imageUrl: token.imageUrl,
+                            child: FadeInImage.memoryNetwork(
+                              placeholder: bytes,
+                              image: token.imageUrl,
                               fit: BoxFit.cover,
                               height: 40.0,
-                              width: 40.0,
                             ),
                           ),
                           title: Row(
@@ -222,7 +218,7 @@ class _TokenListScreenState extends State<TokenListScreen> {
   }
 
   void _onReceiveButtonPressed() {
-    final String _address = widget.walletAccount.address;
+    const String address = 'widget.walletAccount.address';
 
     modalBottomSheet(
       context: context,
@@ -232,16 +228,16 @@ class _TokenListScreenState extends State<TokenListScreen> {
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0, top: 20.0),
             child: QrImage(
-              data: _address,
+              data: address,
               size: 170.0,
-              semanticsLabel: _address,
+              semanticsLabel: address,
               backgroundColor: MorphColor.whiteColor,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 20.0),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 20.0),
             child: Text(
-              _address,
+              address,
               textAlign: TextAlign.center,
             ),
           ),
@@ -249,7 +245,7 @@ class _TokenListScreenState extends State<TokenListScreen> {
       ),
       bottomContent: PrimaryButton(
         title: 'Salin Alamat',
-        onPressed: () => Clipboard.setData(ClipboardData(text: _address)),
+        onPressed: () => Clipboard.setData(const ClipboardData(text: address)),
       ),
     );
   }

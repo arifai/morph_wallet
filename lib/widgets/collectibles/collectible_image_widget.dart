@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:morph_wallet/utils/bytes.dart';
 
 class CollectibleImageWidget extends StatelessWidget {
   final String imgUrl;
@@ -17,9 +17,9 @@ class CollectibleImageWidget extends StatelessWidget {
       onTap: onTap,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
-        child: CachedNetworkImage(
-          placeholder: (context, url) => const Text('...'),
-          imageUrl: imgUrl,
+        child: FadeInImage.memoryNetwork(
+          placeholder: bytes,
+          image: imgUrl,
           fit: BoxFit.cover,
         ),
       ),

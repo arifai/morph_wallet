@@ -18,7 +18,7 @@ class CreateWallet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final NavigationService _navService = locator<NavigationService>();
+    final NavigationService navService = locator<NavigationService>();
 
     return Scaffold(
       appBar: AppBar(
@@ -65,7 +65,7 @@ class CreateWallet extends StatelessWidget {
             ),
             PrimaryButton(
               title: 'Selanjutnya',
-              onPressed: () => _navService.navigateTo(
+              onPressed: () => navService.navigateTo(
                 MorphRoute.walletInfoForm,
                 arguments: mnemonic.join(' '),
               ),

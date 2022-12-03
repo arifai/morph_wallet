@@ -27,14 +27,22 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
   final TextEditingController _confirmPasswordCtl = TextEditingController();
   final NavigationService _navService = locator<NavigationService>();
   final int _maxLength = 20;
+  late CreateWalletBloc _createWalletBloc;
   int _textLength = 0;
   bool _isVisible = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _createWalletBloc = context.read<CreateWalletBloc>();
+  }
 
   @override
   void dispose() {
     _walletNameCtl.dispose();
     _passwordCtl.dispose();
     _confirmPasswordCtl.dispose();
+    _createWalletBloc.close();
     super.dispose();
   }
 
@@ -82,7 +90,8 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
                                   '${_textLength.toString()}/${_maxLength.toString()}',
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               onEditingComplete: () =>
                                   FocusScope.of(context).nextFocus(),
                               onChanged: (value) {
@@ -105,7 +114,8 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
                               obscureText: _isVisible,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               onEditingComplete: () =>
                                   FocusScope.of(context).nextFocus(),
                               onChanged: (value) {
@@ -140,7 +150,8 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
                               obscureText: _isVisible,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.done,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               onEditingComplete: () =>
                                   FocusScope.of(context).unfocus(),
                               onChanged: (value) {

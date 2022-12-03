@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:morph_wallet/blocs/nft/nft_bloc.dart';
 import 'package:morph_wallet/blocs/nft/nft_event.dart';
 import 'package:morph_wallet/blocs/nft/nft_state.dart';
+import 'package:morph_wallet/models/nft/nft.dart';
 import 'package:morph_wallet/screens/empty/empty_screen.dart';
 import 'package:morph_wallet/widgets/collectibles/collectible_image_widget.dart';
 import 'package:morph_wallet/widgets/commons/loading.dart';
@@ -16,15 +17,34 @@ class CollectibleListScreen extends StatefulWidget {
 }
 
 class _CollectibleListScreenState extends State<CollectibleListScreen> {
+  late NftBloc _nftBloc;
+  late List<Nft> _nfts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _nftBloc = context.read<NftBloc>();
+  }
+
+  @override
+  void dispose() {
+    _nftBloc.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _nftBloc = BlocProvider.of<NftBloc>(context);
+    return BlocBuilder<NftBloc, NftState>(
+      builder: (_, state) {
+        if (state is NftListLoading) {
+          return const Loading();
+        } else if (state is NftListLoaded) {
+          _nfts = state.nfts;
+        }
 
-    return BlocBuilder<NftBloc, NftState>(builder: (_, state) {
-      if (state is NftListLoading) {
-        return const Loading();
-      } else if (state is NftListLoaded) {
-        final nfts = state.nfts;
+        if (_nfts.isEmpty) {
+          return const EmptyScreen(text: 'No NFTs');
+        }
 
         return RefreshIndicator(
           color: MorphColor.primaryColor,
@@ -35,7 +55,7 @@ class _CollectibleListScreenState extends State<CollectibleListScreen> {
             });
           },
           child: GridView.builder(
-            itemCount: nfts.length,
+            itemCount: _nfts.length,
             padding: const EdgeInsets.all(20.0),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
@@ -44,7 +64,7 @@ class _CollectibleListScreenState extends State<CollectibleListScreen> {
             ),
             itemBuilder: (_, idx) => Stack(
               children: [
-                CollectibleImageWidget(imgUrl: nfts[idx].imgUrl),
+                CollectibleImageWidget(imgUrl: _nfts[idx].imgUrl),
                 Positioned(
                   height: 30.0,
                   bottom: 5.0,
@@ -62,7 +82,7 @@ class _CollectibleListScreenState extends State<CollectibleListScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 10.0),
                             child: Text(
-                              nfts[idx].name,
+                              _nfts[idx].name,
                               textAlign: TextAlign.start,
                               overflow: TextOverflow.ellipsis,
                               style:
@@ -75,7 +95,7 @@ class _CollectibleListScreenState extends State<CollectibleListScreen> {
                             padding:
                                 const EdgeInsets.only(right: 10.0, left: 10.0),
                             child: Text(
-                              nfts[idx].count.toString(),
+                              _nfts[idx].count.toString(),
                               textAlign: TextAlign.end,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
@@ -92,9 +112,7 @@ class _CollectibleListScreenState extends State<CollectibleListScreen> {
             ),
           ),
         );
-      } else {
-        return const EmptyScreen(text: 'Unknown State');
-      }
-    });
+      },
+    );
   }
 }

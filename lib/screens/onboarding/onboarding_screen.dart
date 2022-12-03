@@ -11,11 +11,11 @@ class OnboardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final NavigationService _navService = locator<NavigationService>();
+    final NavigationService navService = locator<NavigationService>();
     List<String> mnemonic = WalletService().generetaMnemonic();
 
-    void _onCreateButtonPressed() {
-      _navService.navigateTo(MorphRoute.createWallet, arguments: mnemonic);
+    void onCreateButtonPressed() {
+      navService.navigateTo(MorphRoute.createWallet, arguments: mnemonic);
     }
 
     return Scaffold(
@@ -71,7 +71,7 @@ class OnboardingScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 16.0),
                     child: PrimaryButton(
                       title: 'Buat Dompet Baru',
-                      onPressed: _onCreateButtonPressed,
+                      onPressed: onCreateButtonPressed,
                     ),
                   ),
                   Padding(

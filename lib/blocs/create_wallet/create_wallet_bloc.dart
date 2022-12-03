@@ -14,14 +14,14 @@ class CreateWalletBloc extends Bloc<CreateWalletEvent, CreateWalletState> {
 
       try {
         accountRepository.create(
-          name: event.walletAccount.name,
-          mnemonic: event.walletAccount.mnemonic,
-          password: event.walletAccount.password,
+          event.walletAccount.name,
+          event.walletAccount.mnemonic,
+          event.walletAccount.password,
         );
 
         emit(CreateWalletSuccess());
       } catch (e) {
-        emit(CreateWalletFailure(message: e.toString()));
+        emit(CreateWalletFailure(message: '$e'));
       }
     });
   }

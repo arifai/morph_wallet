@@ -21,7 +21,6 @@ class PrimaryButton extends StatelessWidget {
 
     return ElevatedButton(
       onPressed: onPressed,
-      child: Text(title),
       style: ButtonStyle(
         fixedSize: fixedSize ??
             MaterialStateProperty.all(
@@ -36,6 +35,7 @@ class PrimaryButton extends StatelessWidget {
           ),
         ),
       ),
+      child: Text(title),
     );
   }
 }

@@ -17,20 +17,20 @@ class SecondaryButton extends StatelessWidget {
 
     return OutlinedButton(
       onPressed: onPressed,
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontFamily: 'Inter',
-          fontWeight: FontWeight.bold,
-          color: MorphColor.greyColor,
-        ),
-      ),
       style: ButtonStyle(
         fixedSize: MaterialStateProperty.all(
           Size(
             SizeConfig.blockSizeVertical * 41,
             SizeConfig.blockSizeHorizontal * 13,
           ),
+        ),
+      ),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.bold,
+          color: MorphColor.greyColor,
         ),
       ),
     );

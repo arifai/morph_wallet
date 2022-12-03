@@ -25,7 +25,6 @@ class MorphTheme {
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         elevation: 0,
         type: BottomNavigationBarType.fixed,
-        // showSelectedLabels: false, FIXME: Not working
         showUnselectedLabels: false,
         selectedLabelStyle: TextStyle(fontSize: 11.3),
         selectedItemColor: MorphColor.primaryColor,

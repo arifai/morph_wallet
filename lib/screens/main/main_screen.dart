@@ -4,7 +4,6 @@ import 'package:morph_wallet/blocs/bottom_navbar/bottom_navbar_bloc.dart';
 import 'package:morph_wallet/blocs/bottom_navbar/bottom_navbar_event.dart';
 import 'package:morph_wallet/blocs/bottom_navbar/bottom_navbar_item.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
-import 'package:morph_wallet/models/wallet_account/wallet_account.dart';
 import 'package:morph_wallet/screens/empty/empty_screen.dart';
 import 'package:morph_wallet/screens/collectible/collectible_list_screen.dart';
 import 'package:morph_wallet/screens/token/token_list_screen.dart';
@@ -18,25 +17,21 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  late WalletAccount walletAccount;
-
   @override
   Widget build(BuildContext context) {
-    final _bottomNavbarBloc = BlocProvider.of<BottomNavbarBloc>(context);
+    final bottomNavbarBloc = context.read<BottomNavbarBloc>();
 
     return BlocBuilder<BottomNavbarBloc, BottomNavbarItem>(
+      bloc: bottomNavbarBloc,
       builder: (context, currentNavItem) {
         Widget body;
 
         if (currentNavItem == BottomNavbarItem.wallet) {
-          body = TabBarView(
-            physics: const NeverScrollableScrollPhysics(),
+          body = const TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             children: [
-              TokenListScreen(
-                key: MorphKey.tokenKey,
-                walletAccount: walletAccount,
-              ),
-              const CollectibleListScreen(key: MorphKey.collectibleKey),
+              TokenListScreen(key: MorphKey.tokenKey),
+              CollectibleListScreen(key: MorphKey.collectibleKey),
             ],
           );
         } else {
@@ -65,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
             body: body,
             bottomNavigationBar: Navbar(
               currentNavItem: currentNavItem,
-              onSelectedNavItem: (item) => _bottomNavbarBloc.add(
+              onSelectedNavItem: (item) => bottomNavbarBloc.add(
                 NavbarItemUpdated(item),
               ),
             ),

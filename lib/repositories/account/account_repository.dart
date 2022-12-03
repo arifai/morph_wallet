@@ -1,11 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/rendering.dart';
-import 'package:morph_wallet/cores/repo.dart';
+import 'package:morph_wallet/cores/morph_repository.dart';
 import 'package:morph_wallet/services/wallet_service.dart';
 
 class AccountRepository {
   static AccountRepository? _singleton;
   late WalletService walletService;
-  MorphRepo? repo;
+  MorphRepositoy? repo;
 
   factory AccountRepository() {
     _singleton ??= AccountRepository.internal();
@@ -14,17 +16,11 @@ class AccountRepository {
   }
 
   AccountRepository.internal() {
-    repo = MorphRepo('account');
+    repo = MorphRepositoy('account');
   }
 
-  Future<void> create({
-    required String name,
-    required String mnemonic,
-    required String password,
-  }) async {
-    await walletService.importWallet(mnemonic);
-
-    await repo!.putData('result', {
+  Future<void> create(String name, String mnemonic, String password) async {
+    await repo?.putData('result', {
       'name': name,
       'mnemonic': WalletService().encryptString(mnemonic),
       'password': WalletService().encryptString(password),
@@ -33,21 +29,21 @@ class AccountRepository {
     return;
   }
 
-  Future<bool> hasAccount() async {
-    var accountName = await getWalletAccountName();
-
-    return accountName != null;
-  }
-
-  Future<String?> getWalletAccountName() async {
-    return await repo!.getData('result').then((value) {
-      debugPrint('This account data: $value');
+  FutureOr<String?> getWalletAccountName() async {
+    return await repo?.getData('result').then((value) {
+      debugPrint('Account result: $value');
 
       if (value!.isNotEmpty) {
-        return value['name'] as String;
+        return value['name'];
       } else {
         return null;
       }
     });
+  }
+
+  FutureOr<bool> hasAccount() async {
+    final String? accountName = await getWalletAccountName();
+
+    return accountName != null;
   }
 }

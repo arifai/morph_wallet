@@ -17,7 +17,7 @@ class WalletService extends WalletUtil {
 
   @override
   String encryptString(String string) {
-    final encrypter = Encrypter(AES(key));
+    final encrypter = Encrypter(AES(key, mode: AESMode.cfb64));
     final encrypted = encrypter.encrypt(string, iv: iv);
 
     return encrypted.base64;
@@ -50,8 +50,7 @@ class WalletService extends WalletUtil {
 
   @override
   Future<void> loadKeypair() async {
-    final Ed25519HDKeyPair keypair =
-        await Executor().execute(arg1: mnemonic, fun1: createKeypair);
+    final Ed25519HDKeyPair keypair = await Executor().execute(arg1: mnemonic);
 
     wallet = keypair;
     address = wallet.address;
