@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:morph_wallet/blocs/nft/nft_bloc.dart';
-import 'package:morph_wallet/blocs/nft/nft_event.dart';
-import 'package:morph_wallet/blocs/nft/nft_state.dart';
 import 'package:morph_wallet/models/nft/nft.dart';
 import 'package:morph_wallet/screens/empty/empty_screen.dart';
 import 'package:morph_wallet/widgets/collectibles/collectible_image_widget.dart';
@@ -27,18 +25,12 @@ class _CollectibleListScreenState extends State<CollectibleListScreen> {
   }
 
   @override
-  void dispose() {
-    _nftBloc.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocBuilder<NftBloc, NftState>(
       builder: (_, state) {
-        if (state is NftListLoading) {
+        if (state.status == NftStatus.loading) {
           return const Loading();
-        } else if (state is NftListLoaded) {
+        } else if (state.status == NftStatus.loaded) {
           _nfts = state.nfts;
         }
 

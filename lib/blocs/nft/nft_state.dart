@@ -1,19 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:morph_wallet/models/nft/nft.dart';
+part of 'nft_bloc.dart';
 
-@immutable
-abstract class NftState {}
+enum NftStatus { initial, loading, loaded }
 
-class NftListLoading extends NftState {
-  @override
-  String toString() => 'NftListLoading';
-}
-
-class NftListLoaded extends NftState {
+class NftState extends Equatable {
+  final NftStatus status;
   final List<Nft> nfts;
 
-  NftListLoaded(this.nfts);
+  const NftState({
+    this.status = NftStatus.initial,
+    this.nfts = const <Nft>[],
+  });
+
+  NftState copy({NftStatus? status, List<Nft>? nfts}) {
+    return NftState(
+      status: status ?? this.status,
+      nfts: nfts ?? this.nfts,
+    );
+  }
 
   @override
-  String toString() => 'NftListLoaded';
+  List<Object?> get props => [status, nfts];
 }

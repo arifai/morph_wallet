@@ -1,18 +1,16 @@
-import 'package:flutter/material.dart';
+part of 'wallet_account_bloc.dart';
 
-@immutable
-abstract class WalletAccountState {}
+enum WalletAccountStatus { initial, loading, loaded }
 
-class WalletAccountLoading extends WalletAccountState {
-  WalletAccountLoading();
+class WalletAccountState extends Equatable {
+  final WalletAccountStatus status;
 
-  @override
-  String toString() => 'WalletAccountLoading';
-}
+  const WalletAccountState({this.status = WalletAccountStatus.initial});
 
-class WalletAccountLoaded extends WalletAccountState {
-  WalletAccountLoaded();
+  WalletAccountState copy({WalletAccountStatus? status}) {
+    return WalletAccountState(status: status ?? this.status);
+  }
 
   @override
-  String toString() => 'WalletAccountLoaded';
+  List<Object?> get props => [status];
 }

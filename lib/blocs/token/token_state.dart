@@ -1,19 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:morph_wallet/models/token/token.dart';
+part of 'token_bloc.dart';
 
-@immutable
-abstract class TokenState {}
+enum TokenStatus { initial, loading, loaded, failure }
 
-class TokenListLoading extends TokenState {
-  @override
-  String toString() => 'TokenListLoading';
-}
-
-class TokenListLoaded extends TokenState {
+class TokenState extends Equatable {
+  final TokenStatus status;
   final List<Token> tokens;
 
-  TokenListLoaded(this.tokens);
+  const TokenState({
+    this.status = TokenStatus.initial,
+    this.tokens = const <Token>[],
+  });
+
+  TokenState copy({TokenStatus? status, List<Token>? tokens}) {
+    return TokenState(
+      status: status ?? this.status,
+      tokens: tokens ?? this.tokens,
+    );
+  }
 
   @override
-  String toString() => 'TokenListLoaded';
+  List<Object?> get props => [status, tokens];
 }

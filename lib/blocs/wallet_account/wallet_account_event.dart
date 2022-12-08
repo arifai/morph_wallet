@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+part of 'wallet_account_bloc.dart';
 
-@immutable
 abstract class WalletAccountEvent {}
 
 class LoadWalletAccount extends WalletAccountEvent {

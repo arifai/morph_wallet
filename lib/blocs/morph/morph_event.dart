@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
+part of 'morph_bloc.dart';
 
-@immutable
 abstract class MorphEvent {}
 
 class StartupEvent extends MorphEvent {
   StartupEvent();
 }
-

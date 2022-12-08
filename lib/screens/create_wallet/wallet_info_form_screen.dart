@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:morph_wallet/blocs/create_wallet/create_wallet_bloc.dart';
-import 'package:morph_wallet/blocs/create_wallet/create_wallet_event.dart';
-import 'package:morph_wallet/blocs/create_wallet/create_wallet_state.dart';
 import 'package:morph_wallet/cores/locator.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
 import 'package:morph_wallet/models/wallet_account/wallet_account.dart';
@@ -54,11 +52,11 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
       ),
       body: BlocListener<CreateWalletBloc, CreateWalletState>(
         listener: (_, state) {
-          if (state is CreateWalletSuccess) {
+          if (state.status == CreateWalletStatus.success) {
             _navService.pushTo(MorphRoute.main);
-          } else if (state is CreateWalletFailure) {
+          } else if (state.status == CreateWalletStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
+              SnackBar(content: Text('${state.message}')),
             );
           }
         },
@@ -185,7 +183,7 @@ class _WalletInfoFormScreenState extends State<WalletInfoFormScreen> {
                   ),
                   PrimaryButton(
                     title: 'Konfirmasi',
-                    onPressed: state is! CreateWalletLoading
+                    onPressed: state.status != CreateWalletStatus.loading
                         ? _onConfirmButtonPressed
                         : null,
                   ),

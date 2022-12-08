@@ -1,26 +1,27 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morph_wallet/blocs/morph/morph_event.dart';
-import 'package:morph_wallet/blocs/morph/morph_state.dart';
 import 'package:morph_wallet/repositories/account/account_repository.dart';
 
-class MorphBloc extends Bloc<MorphEvent, MorpthState> {
-  final AccountRepository accountRepository;
-  static MorpthState get initialState => AppInitialization();
+part 'morph_event.dart';
+part 'morph_state.dart';
 
-  MorphBloc(this.accountRepository) : super(MorphBloc.initialState) {
+class MorphBloc extends Bloc<MorphEvent, MorphState> {
+  final AccountRepository accountRepository;
+
+  MorphBloc(this.accountRepository) : super(const MorphState()) {
     on<StartupEvent>((event, emit) async {
-      emit(WalletLoading());
+      emit(state.copy(status: MorphStatus.loading));
 
       try {
         final bool hasAccount = await accountRepository.hasAccount();
 
         if (hasAccount) {
-          emit(HasAnAccount());
+          emit(state.copy(status: MorphStatus.hasAnAccount));
         } else {
-          emit(CreateOrImportFirst());
+          emit(state.copy(status: MorphStatus.createOrImport));
         }
       } catch (e) {
-        emit(WalletError('WalletError: $e'));
+        emit(state.copy(status: MorphStatus.failure));
       }
     });
   }

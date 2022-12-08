@@ -1,33 +1,20 @@
-import 'package:flutter/material.dart';
+part of 'morph_bloc.dart';
 
-@immutable
-abstract class MorpthState {}
+enum MorphStatus { initial, loading, createOrImport, hasAnAccount, failure }
 
-class AppInitialization extends MorpthState {
-  @override
-  String toString() => 'AppInitialization';
-}
+class MorphState extends Equatable {
+  final MorphStatus status;
+  final String? message;
 
-class WalletLoading extends MorpthState {
-  @override
-  String toString() => 'WalletLoading';
-}
+  const MorphState({this.status = MorphStatus.initial, this.message});
 
-class CreateOrImportFirst extends MorpthState {
-  @override
-  String toString() => 'CreateOrImportFirst';
-}
-
-class HasAnAccount extends MorpthState {
-  @override
-  String toString() => 'HasAnAccount';
-}
-
-class WalletError extends MorpthState {
-  final String message;
-
-  WalletError(this.message);
+  MorphState copy({MorphStatus? status, String? message}) {
+    return MorphState(
+      status: status ?? this.status,
+      message: message ?? this.message,
+    );
+  }
 
   @override
-  String toString() => 'WalletError: $message';
+  List<Object?> get props => [status, message];
 }

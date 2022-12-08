@@ -1,28 +1,23 @@
-import 'package:flutter/material.dart';
+part of 'create_wallet_bloc.dart';
 
-@immutable
-abstract class CreateWalletState {}
+enum CreateWalletStatus { initial, loading, success, failure }
 
-class CreateWalletInitial extends CreateWalletState {
-  @override
-  String toString() => 'CreateWalletInitial';
-}
+class CreateWalletState extends Equatable {
+  final CreateWalletStatus status;
+  final String? message;
 
-class CreateWalletLoading extends CreateWalletState {
-  @override
-  String toString() => 'CreateWalletLoading';
-}
+  const CreateWalletState({
+    this.status = CreateWalletStatus.initial,
+    this.message,
+  });
 
-class CreateWalletSuccess extends CreateWalletState {
-  @override
-  String toString() => 'CreateWalletSuccess';
-}
-
-class CreateWalletFailure extends CreateWalletState {
-  final String message;
-
-  CreateWalletFailure({required this.message});
+  CreateWalletState copy({CreateWalletStatus? status, String? message}) {
+    return CreateWalletState(
+      status: status ?? this.status,
+      message: message ?? this.message,
+    );
+  }
 
   @override
-  String toString() => 'CreateWalletFailure';
+  List<Object?> get props => [status, message];
 }

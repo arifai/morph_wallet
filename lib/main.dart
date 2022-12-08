@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:morph_wallet/blocs/morph/morph_bloc.dart';
-import 'package:morph_wallet/blocs/morph/morph_event.dart';
 import 'package:morph_wallet/blocs/simple_bloc_observer.dart';
 import 'package:morph_wallet/cores/locator.dart';
 import 'package:morph_wallet/cores/morph_core.dart';

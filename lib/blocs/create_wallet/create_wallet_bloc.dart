@@ -1,27 +1,28 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morph_wallet/blocs/create_wallet/create_wallet_event.dart';
-import 'package:morph_wallet/blocs/create_wallet/create_wallet_state.dart';
+import 'package:morph_wallet/models/wallet_account/wallet_account.dart';
 import 'package:morph_wallet/repositories/account/account_repository.dart';
+
+part 'create_wallet_event.dart';
+part 'create_wallet_state.dart';
 
 class CreateWalletBloc extends Bloc<CreateWalletEvent, CreateWalletState> {
   final AccountRepository accountRepository;
-  static CreateWalletState get initialState => CreateWalletInitial();
 
-  CreateWalletBloc(this.accountRepository)
-      : super(CreateWalletBloc.initialState) {
-    on<CreateWalletButtonPressed>((event, emit) {
-      emit(CreateWalletLoading());
+  CreateWalletBloc(this.accountRepository) : super(const CreateWalletState()) {
+    on<CreateWalletButtonPressed>((event, emit) async {
+      emit(state.copy(status: CreateWalletStatus.loading));
 
       try {
-        accountRepository.create(
+        await accountRepository.create(
           event.walletAccount.name,
           event.walletAccount.mnemonic,
           event.walletAccount.password,
         );
 
-        emit(CreateWalletSuccess());
+        emit(state.copy(status: CreateWalletStatus.success));
       } catch (e) {
-        emit(CreateWalletFailure(message: '$e'));
+        emit(state.copy(status: CreateWalletStatus.failure, message: '$e'));
       }
     });
   }

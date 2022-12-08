@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+part of 'nft_bloc.dart';
 
-@immutable
 abstract class NftEvent{}
 
 class LoadListNft extends NftEvent {

@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+part of 'token_bloc.dart';
 
-@immutable
 abstract class TokenEvent {}
 
 class LoadListToken extends TokenEvent {

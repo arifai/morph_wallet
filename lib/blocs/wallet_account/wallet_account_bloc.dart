@@ -1,15 +1,15 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morph_wallet/blocs/wallet_account/wallet_account_event.dart';
-import 'package:morph_wallet/blocs/wallet_account/wallet_account_state.dart';
+
+part 'wallet_account_event.dart';
+part 'wallet_account_state.dart';
 
 class WalletAccountBloc extends Bloc<WalletAccountEvent, WalletAccountState> {
-  static WalletAccountState get initialState => WalletAccountLoading();
-
-  WalletAccountBloc() : super(WalletAccountBloc.initialState) {
+  WalletAccountBloc() : super(const WalletAccountState()) {
     on<LoadWalletAccount>((event, emit) {
-      emit(initialState);
+      emit(state.copy(status: WalletAccountStatus.loading));
 
-      emit(WalletAccountLoaded());
+      emit(state.copy(status: WalletAccountStatus.loaded));
     });
   }
 }

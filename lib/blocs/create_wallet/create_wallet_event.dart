@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:morph_wallet/models/wallet_account/wallet_account.dart';
+part of 'create_wallet_bloc.dart';
 
-@immutable
 abstract class CreateWalletEvent {}
 
 class CreateWalletButtonPressed extends CreateWalletEvent {

@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:morph_wallet/blocs/token/token_bloc.dart';
-import 'package:morph_wallet/blocs/token/token_event.dart';
-import 'package:morph_wallet/blocs/token/token_state.dart';
 import 'package:morph_wallet/cores/size_config.dart';
-import 'package:morph_wallet/screens/empty/empty_screen.dart';
+import 'package:morph_wallet/models/token/token.dart';
 import 'package:morph_wallet/utils/bytes.dart';
 import 'package:morph_wallet/utils/string_extension.dart';
 import 'package:morph_wallet/widgets/buttons/primary_button.dart';
@@ -24,6 +22,7 @@ class TokenListScreen extends StatefulWidget {
 
 class _TokenListScreenState extends State<TokenListScreen> {
   final ScrollController _scrollController = ScrollController();
+  late List<Token> _tokens = [];
   late double _totalEstimateAssets = 0;
   late TokenBloc _tokenBloc;
 
@@ -111,105 +110,103 @@ class _TokenListScreenState extends State<TokenListScreen> {
           const Divider(),
           BlocBuilder<TokenBloc, TokenState>(
             builder: (_, state) {
-              if (state is TokenListLoading) {
+              if (state.status == TokenStatus.loading) {
                 return const Loading();
-              } else if (state is TokenListLoaded) {
-                final tokens = state.tokens;
+              } else if (state.status == TokenStatus.loaded) {
+                _tokens = state.tokens;
+              }
 
-                // Calculate estimate total assets (IDR)
-                _totalEstimateAssets =
-                    tokens.map((e) => e.toIDRBalance).reduce((a, b) => a + b);
+              // Calculate estimate total assets (IDR)
+              _totalEstimateAssets =
+                  _tokens.map((e) => e.toIDRBalance).reduce((a, b) => a + b);
 
-                return Flexible(
-                  child: RefreshIndicator(
-                    color: MorphColor.primaryColor,
-                    displacement: 10.0,
-                    onRefresh: () async {
-                      await Future.delayed(const Duration(seconds: 2))
-                          .then((_) => _tokenBloc.add(LoadListToken()));
-                    },
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      itemCount: tokens.length,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemBuilder: (_, index) {
-                        var token = tokens[index];
+              return Flexible(
+                child: RefreshIndicator(
+                  color: MorphColor.primaryColor,
+                  displacement: 10.0,
+                  onRefresh: () async {
+                    await Future.delayed(const Duration(seconds: 2))
+                        .then((_) => _tokenBloc.add(LoadListToken()));
+                  },
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: _tokens.length,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemBuilder: (_, index) {
+                      var token = _tokens[index];
 
-                        return ListTile(
-                          key: ValueKey('__${token.ticker}_${index}__'),
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(50.0),
-                            child: FadeInImage.memoryNetwork(
-                              placeholder: bytes,
-                              image: token.imageUrl,
-                              fit: BoxFit.cover,
-                              height: 40.0,
+                      return ListTile(
+                        key: ValueKey('__${token.ticker}_${index}__'),
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: FadeInImage.memoryNetwork(
+                            placeholder: bytes,
+                            image: token.imageUrl,
+                            fit: BoxFit.cover,
+                            height: 40.0,
+                          ),
+                        ),
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              token.ticker,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                token.ticker,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                ),
+                            Text(
+                              token.balance.toString(),
+                              maxLines: 1,
+                              textAlign: TextAlign.end,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
                               ),
-                              Text(
-                                token.balance.toString(),
-                                maxLines: 1,
-                                textAlign: TextAlign.end,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          subtitle: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              RichText(
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                text: TextSpan(
-                                  text: '${token.price}'.toIdr(),
-                                  style: const TextStyle(
-                                    fontSize: 12.5,
-                                    color: MorphColor.greyColor,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text:
-                                          '\u{2002}\u{2002}${token.priceChanges}',
-                                      style: const TextStyle(
-                                        color: MorphColor.errorColor,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Text(
-                                '${token.toIDRBalance}'.toIdr(),
-                                maxLines: 1,
-                                textAlign: TextAlign.end,
-                                overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                        subtitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RichText(
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                text: '${token.price}'.toIdr(),
                                 style: const TextStyle(
                                   fontSize: 12.5,
                                   color: MorphColor.greyColor,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        '\u{2002}\u{2002}${token.priceChanges}',
+                                    style: const TextStyle(
+                                      color: MorphColor.errorColor,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                            ),
+                            Text(
+                              '${token.toIDRBalance}'.toIdr(),
+                              maxLines: 1,
+                              textAlign: TextAlign.end,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 12.5,
+                                color: MorphColor.greyColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                );
-              } else {
-                return const EmptyScreen(text: 'Unknown State');
-              }
+                ),
+              );
             },
           ),
         ],
@@ -236,10 +233,7 @@ class _TokenListScreenState extends State<TokenListScreen> {
           ),
           const Padding(
             padding: EdgeInsets.only(bottom: 20.0),
-            child: Text(
-              address,
-              textAlign: TextAlign.center,
-            ),
+            child: Text(address, textAlign: TextAlign.center),
           ),
         ],
       ),
