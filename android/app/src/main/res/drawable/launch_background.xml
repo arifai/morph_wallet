@@ -3,7 +3,6 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/primary_black" />
 
-    <!-- FIXME: Fix this splash screen -->
     <!-- You can insert your own image assets here -->
     <item>
         <bitmap
