@@ -19,6 +19,7 @@ class FormWidget extends StatelessWidget {
   final Widget? suffixIcon;
   final String? suffixText;
   final String? errorText;
+  final TextStyle? hintStyle;
 
   const FormWidget({
     Key? key,
@@ -39,6 +40,7 @@ class FormWidget extends StatelessWidget {
     this.suffixIcon,
     this.suffixText,
     this.errorText,
+    this.hintStyle,
   }) : super(key: key);
 
   @override
@@ -63,6 +65,7 @@ class FormWidget extends StatelessWidget {
       ),
       decoration: InputDecoration(
         hintText: hintText,
+        hintStyle: hintStyle,
         suffixIcon: suffixIcon,
         suffixText: suffixText,
         counterText: '',

@@ -21,7 +21,7 @@ class MorphBloc extends Bloc<MorphEvent, MorphState> {
           emit(state.copy(status: MorphStatus.createOrImport));
         }
       } catch (e) {
-        emit(state.copy(status: MorphStatus.failure));
+        emit(state.copy(status: MorphStatus.failure, message: '$e'));
       }
     });
   }

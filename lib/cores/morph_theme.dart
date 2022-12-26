@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:morph_wallet/cores/size_config.dart';
 import 'package:morph_wallet/widgets/commons/morph_color.dart';
 
 /// Default Morph wallet theme.
@@ -66,16 +67,20 @@ class MorphTheme {
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
           ),
-          // ignore: fixme
-          // FIXME: I don't know this isn't work
-          // textStyle: MaterialStateProperty.all(
-          //   const TextStyle(
-          //     fontSize: 17.0,
-          //     fontFamily: 'Inter',
-          //     fontWeight: FontWeight.bold,
-          //     color: MorphColor.secondaryDarkColor,
-          //   ),
-          // ),
+          fixedSize: MaterialStateProperty.all(
+            Size(
+              SizeConfig.blockSizeVertical * 41,
+              SizeConfig.blockSizeHorizontal * 13,
+            ),
+          ),
+          textStyle: MaterialStateProperty.all(
+            const TextStyle(
+              fontSize: 17.0,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.bold,
+              color: MorphColor.secondaryDarkColor,
+            ),
+          ),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -83,6 +88,17 @@ class MorphTheme {
           elevation: MaterialStateProperty.all(0.0),
           backgroundColor: MaterialStateProperty.all(MorphColor.primaryColor),
           overlayColor: MaterialStateProperty.all(Colors.transparent),
+          fixedSize: MaterialStateProperty.all(
+            Size(
+              SizeConfig.blockSizeVertical * 41,
+              SizeConfig.blockSizeHorizontal * 13,
+            ),
+          ),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
           textStyle: MaterialStateProperty.all(
             const TextStyle(
               fontFamily: 'Inter',

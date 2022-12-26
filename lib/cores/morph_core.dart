@@ -11,6 +11,7 @@ class MorphRoute {
 
 /// Morph images asset
 class MorphImage {
+  static const solanaGreyScale = 'assets/images/solana_grey_scale.png';
   static const pattern = 'assets/images/pattern.png';
 }
 

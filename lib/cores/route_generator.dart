@@ -6,6 +6,7 @@ import 'package:morph_wallet/blocs/nft/nft_bloc.dart';
 import 'package:morph_wallet/blocs/token/token_bloc.dart';
 import 'package:morph_wallet/blocs/wallet_account/wallet_account_bloc.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
+import 'package:morph_wallet/models/args/create_or_import_args.dart';
 import 'package:morph_wallet/repositories/account/account_repository.dart';
 import 'package:morph_wallet/screens/create_wallet/create_wallet.dart';
 import 'package:morph_wallet/screens/create_wallet/wallet_info_form_screen.dart';
@@ -29,29 +30,29 @@ class RouteGenerator {
         );
       case MorphRoute.createWallet:
         return MaterialPageRoute(
-          builder: (_) => CreateWallet(mnemonic: args as List<String>),
+          builder: (_) => const CreateWallet(),
         );
       case MorphRoute.walletInfoForm:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider<CreateWalletBloc>(
+          builder: (_) => BlocProvider(
             create: (context) => CreateWalletBloc(accountRepository),
-            child: WalletInfoFormScreen(mnemonic: args as String),
+            child: WalletInfoFormScreen(args: args as CreateOrImportArgs),
           ),
         );
       case MorphRoute.main:
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
-              BlocProvider<BottomNavbarBloc>(
+              BlocProvider(
                 create: (_) => BottomNavbarBloc(),
               ),
-              BlocProvider<TokenBloc>(
+              BlocProvider(
                 create: (_) => TokenBloc()..add(LoadListToken()),
               ),
-              BlocProvider<NftBloc>(
+              BlocProvider(
                 create: (_) => NftBloc()..add(LoadListNft()),
               ),
-              BlocProvider<WalletAccountBloc>(
+              BlocProvider(
                 create: (_) => WalletAccountBloc()..add(LoadWalletAccount()),
               ),
             ],

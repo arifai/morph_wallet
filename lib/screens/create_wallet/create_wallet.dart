@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:morph_wallet/cores/locator.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
+import 'package:morph_wallet/models/args/create_or_import_args.dart';
 import 'package:morph_wallet/services/navigation_service.dart';
-import 'package:morph_wallet/cores/size_config.dart';
+import 'package:morph_wallet/services/wallet_service.dart';
 import 'package:morph_wallet/widgets/buttons/primary_button.dart';
 import 'package:morph_wallet/widgets/commons/morph_color.dart';
 import 'package:morph_wallet/widgets/commons/morph_icon.dart';
@@ -11,14 +12,16 @@ import 'package:morph_wallet/widgets/mnemonic/mnemonic_widget.dart';
 import 'package:morph_wallet/widgets/commons/warning_widget.dart';
 
 class CreateWallet extends StatelessWidget {
-  final List<String> mnemonic;
-
-  const CreateWallet({Key? key, required this.mnemonic}) : super(key: key);
+  const CreateWallet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    final List<String> mnemonic = WalletService().generetaMnemonic();
     final NavigationService navService = locator<NavigationService>();
+
+    onCopyButtonPressed(BuildContext context) {
+      Clipboard.setData(ClipboardData(text: mnemonic.join(' ')));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +61,7 @@ class CreateWallet extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed: _onCopyButtonPressed(context),
+                    onPressed: onCopyButtonPressed(context),
                   )
                 ],
               ),
@@ -67,16 +70,12 @@ class CreateWallet extends StatelessWidget {
               title: 'Selanjutnya',
               onPressed: () => navService.navigateTo(
                 MorphRoute.walletInfoForm,
-                arguments: mnemonic.join(' '),
+                arguments: CreateOrImportArgs(mnemonic: mnemonic.join(' ')),
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  _onCopyButtonPressed(BuildContext context) {
-    Clipboard.setData(ClipboardData(text: mnemonic.join(' ')));
   }
 }

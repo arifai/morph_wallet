@@ -1,101 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:morph_wallet/cores/size_config.dart';
-import 'package:morph_wallet/widgets/commons/morph_color.dart';
 
 class SecondaryButton extends StatelessWidget {
   final Function()? onPressed;
   final String title;
+  final ButtonStyle? style;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
+
   const SecondaryButton({
     Key? key,
     required this.onPressed,
     required this.title,
+    this.style,
+    this.padding = const EdgeInsets.only(bottom: 16.0),
+    this.margin,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-
-    return OutlinedButton(
-      onPressed: onPressed,
-      style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(
-          Size(
-            SizeConfig.blockSizeVertical * 41,
-            SizeConfig.blockSizeHorizontal * 13,
-          ),
-        ),
-      ),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontFamily: 'Inter',
-          fontWeight: FontWeight.bold,
-          color: MorphColor.greyColor,
-        ),
+    return Container(
+      padding: padding,
+      margin: margin,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: style,
+        child: Text(title),
       ),
     );
-
-    //   return CustomPaint(
-    //     size: Size(
-    //       SizeConfig.blockSizeVertical * 41,
-    //       SizeConfig.blockSizeHorizontal * 13,
-    //     ),
-    //     painter: Painter(
-    //       gradient: const LinearGradient(
-    //         colors: [
-    //           MorphColor.pinkColor,
-    //           MorphColor.primaryColor,
-    //         ],
-    //         begin: Alignment.topCenter,
-    //         end: Alignment.bottomCenter,
-    //       ),
-    //     ),
-    //     child: GestureDetector(
-    //       onTap: onTap,
-    //       behavior: HitTestBehavior.translucent,
-    //       child: Text(
-    //         title,
-    //         style: const TextStyle(
-    //           fontSize: 17.0,
-    //           fontFamily: 'Inter',
-    //           fontWeight: FontWeight.bold,
-    //           color: MorphColor.secondaryDarkColor,
-    //         ),
-    //       ),
-    //     ),
-    //   );
   }
 }
-
-// class Painter extends CustomPainter {
-//   final Paint _paint = Paint();
-//   final Gradient gradient;
-
-//   Painter({required this.gradient});
-
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     Rect outerRect = Offset.zero & size;
-//     var outerRRect =
-//         RRect.fromRectAndRadius(outerRect, const Radius.circular(8.0));
-
-//     Rect innerRect =
-//         Rect.fromLTWH(2, 2, size.width - 2 * 2, size.height - 2 * 2);
-//     var innerRRect = RRect.fromRectAndRadius(
-//       innerRect,
-//       const Radius.circular(8.0 - 2),
-//     );
-
-//     _paint.shader = gradient.createShader(outerRect);
-
-//     Path path1 = Path()..addRRect(outerRRect);
-//     Path path2 = Path()..addRRect(innerRRect);
-//     var path = Path.combine(PathOperation.difference, path1, path2);
-
-//     canvas.drawPath(path, _paint);
-//   }
-
-//   @override
-//   bool shouldRepaint(covariant CustomPainter oldDelegate) =>
-//       oldDelegate != this;
-// }

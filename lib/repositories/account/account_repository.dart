@@ -1,49 +1,79 @@
 import 'dart:async';
 
-import 'package:flutter/rendering.dart';
+import 'package:encrypt/encrypt.dart';
 import 'package:morph_wallet/cores/morph_repository.dart';
+import 'package:morph_wallet/models/wallet_account/keypair.dart';
+import 'package:morph_wallet/models/wallet_account/wallet_account.dart';
 import 'package:morph_wallet/services/wallet_service.dart';
+import 'package:morph_wallet/widgets/commons/constants.dart';
 
 class AccountRepository {
-  static AccountRepository? _singleton;
-  late WalletService walletService;
-  MorphRepositoy? repo;
+  static final AccountRepository _singleton = AccountRepository._internal();
+  final WalletService _walletService = WalletService();
+  MorphRepositoy? _repo;
 
-  factory AccountRepository() {
-    _singleton ??= AccountRepository.internal();
+  factory AccountRepository() => _singleton;
 
-    return _singleton!;
+  AccountRepository._internal() {
+    _repo = MorphRepositoy(RepoKeys.account);
   }
 
-  AccountRepository.internal() {
-    repo = MorphRepositoy('account');
+  Future<void> create(String name, String password, String? mnemonic) async {
+    final int count = await _incrementDerivationDigits();
+
+    await _repo?.putData<Map<String, dynamic>>(
+      RepoKeys.entries,
+      WalletAccount(
+        name,
+        WalletService().encryptString(password),
+        keypair: Keypair(mnemonic, count, count),
+      ).toMap(),
+    );
   }
 
-  Future<void> create(String name, String mnemonic, String password) async {
-    await repo?.putData('result', {
-      'name': name,
-      'mnemonic': WalletService().encryptString(mnemonic),
-      'password': WalletService().encryptString(password),
-    });
+  Future<WalletAccount?> loadWallet() async {
+    final Map<String, dynamic>? entries =
+        await _repo?.getData(RepoKeys.entries);
+    late WalletAccount? account;
 
-    return;
+    if (entries != null) {
+      final Map<dynamic, dynamic> keypairEntries = entries['keypair'];
+      final Keypair keypair = Keypair(
+        keypairEntries['mnemonic'],
+        keypairEntries['account'],
+        keypairEntries['change'],
+      );
+
+      account = WalletAccount(
+        entries['name'],
+        WalletService().decryptString(Encrypted.from64(entries['password'])),
+        wallet: await _walletService.createKeypair(keypair),
+      );
+    } else {
+      account = null;
+    }
+
+    return account;
   }
 
-  FutureOr<String?> getWalletAccountName() async {
-    return await repo?.getData('result').then((value) {
-      debugPrint('Account result: $value');
+  Future<int> _incrementDerivationDigits() async {
+    final WalletAccount? account = await loadWallet();
+    late int count = 0;
 
-      if (value!.isNotEmpty) {
-        return value['name'];
-      } else {
-        return null;
-      }
-    });
+    if (account != null) {
+      return count = account.keypair?.account ?? 0 + 1;
+    } else {
+      return count;
+    }
   }
 
-  FutureOr<bool> hasAccount() async {
-    final String? accountName = await getWalletAccountName();
+  Future<bool> hasAccount() async {
+    final WalletAccount? account = await loadWallet();
 
-    return accountName != null;
+    if (account != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

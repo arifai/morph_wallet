@@ -1,25 +1,11 @@
-import 'dart:io';
-import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class BaseMorphRepository {
-  /// Create new a [BoxCollection].
-  Future<BoxCollection> get openCollection;
-
-  /// Put some data from database.
-  Future<dynamic> putData(String key, Map<String, dynamic> value);
-
-  /// Get some data from database.
-  Future<dynamic> getData(String key);
-
-  /// Delete some data from database.
-  Future<dynamic> deleteDate(String key);
-
-  /// Clear or delete all boxes.
-  void clear();
-
-  /// Close & drop all chached keys and values from memory.
-  void close();
+  Future<Box<dynamic>> setupBox();
+  Future<void> close();
+  Future<void> clearAll();
+  Future<void> putData<E>(String key, E value);
+  Future<Map<String, dynamic>?> getData(String key);
 }
 
 class MorphRepositoy extends BaseMorphRepository {
@@ -27,55 +13,29 @@ class MorphRepositoy extends BaseMorphRepository {
 
   MorphRepositoy(this.name);
 
-  @override
-  Future<BoxCollection> get openCollection async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
+  late Box box = Hive.box(name);
 
-    return await BoxCollection.open(
-      'morph_db',
-      {name},
-      path: appDocDir.path,
-      key: HiveAesCipher(Hive.generateSecureKey()),
+  @override
+  Future<void> clearAll() async => box.deleteAll(box.keys);
+
+  @override
+  Future<void> close() async => await box.close();
+
+  @override
+  Future<Box> setupBox() async {
+    return await Hive.openBox(
+      name,
+      encryptionCipher: HiveAesCipher(Hive.generateSecureKey()),
     );
   }
 
   @override
-  Future<void> putData(String key, Map<String, dynamic> value) async {
-    final box = await openCollection
-        .then((value) => value.openBox<Map<String, dynamic>>(name));
-
-    return box.put(key, value);
+  Future<void> putData<E extends dynamic>(String key, E value) async {
+    return await box.put(key, value);
   }
 
   @override
   Future<Map<String, dynamic>?> getData(String key) async {
-    final box = await openCollection
-        .then((value) => value.openBox<Map<String, dynamic>>(name));
-
-    return box.get(key);
-  }
-
-  @override
-  Future<void> deleteDate(String key) async {
-    final box = await openCollection
-        .then((value) => value.openBox<Map<String, dynamic>>(name));
-
-    return box.delete(key);
-  }
-
-  @override
-  void clear() async {
-    final box = await openCollection;
-
-    box.openBox(name);
-    box.deleteFromDisk();
-  }
-
-  @override
-  void close() async {
-    final box = await openCollection;
-
-    box.openBox(name);
-    box.close();
+    return await box.get(key)?.cast<String, dynamic>();
   }
 }

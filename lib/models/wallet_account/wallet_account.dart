@@ -1,38 +1,24 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:morph_wallet/models/transaction/transaction_detail.dart';
-import 'package:solana/solana.dart' show SolanaClient;
+import 'package:equatable/equatable.dart';
+import 'package:morph_wallet/models/wallet_account/keypair.dart';
+import 'package:solana/solana.dart';
 
-class WalletAccount {
+class WalletAccount extends Equatable {
   final String name;
-  final String mnemonic;
   final String password;
-  late String address;
-  late double balance;
-  late double idrBalance;
-  late Map<String, dynamic> tokens;
-  late List<TransactionDetail> transactionDetail;
-  late SolanaClient solanaClient;
+  final Wallet? wallet;
+  final Keypair? keypair;
 
-  WalletAccount(
-    this.name,
-    this.mnemonic,
-    this.password,
-  ) : super() {
-    solanaClient = SolanaClient(
-      rpcUrl: Uri.parse(dotenv.env['SOLANA_MAINNET_RPC'].toString()),
-      websocketUrl: Uri.parse(dotenv.env['SOLANA_MAINNET_WS'].toString()),
-    );
-  }
+  const WalletAccount(this.name, this.password, {this.wallet, this.keypair});
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+  String? get address => wallet?.address;
+  Ed25519HDPublicKey? get publicKey => wallet?.publicKey;
 
-    data['name'] = name;
-    data['address'] = address;
-    data['mnemonic'] = mnemonic;
-    data['transaction_detail'] =
-        transactionDetail.map((tx) => tx.toJson()).toList();
+  Map<String, dynamic> toMap() => {
+        'name': name,
+        'keypair': keypair?.toMap(),
+        'password': password,
+      };
 
-    return data;
-  }
+  @override
+  List<Object?> get props => [name, password, wallet, keypair];
 }

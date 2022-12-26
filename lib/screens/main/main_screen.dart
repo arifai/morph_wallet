@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:morph_wallet/blocs/bottom_navbar/bottom_navbar_bloc.dart';
 import 'package:morph_wallet/blocs/bottom_navbar/bottom_navbar_event.dart';
 import 'package:morph_wallet/blocs/bottom_navbar/bottom_navbar_item.dart';
+import 'package:morph_wallet/cores/size_config.dart';
 import 'package:morph_wallet/screens/empty/empty_screen.dart';
 import 'package:morph_wallet/screens/home/home_screen.dart';
 import 'package:morph_wallet/widgets/navbar/navbar.dart';
@@ -12,6 +13,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     final bottomNavbarBloc = context.read<BottomNavbarBloc>();
 
     return BlocBuilder<BottomNavbarBloc, BottomNavbarItem>(

@@ -1,41 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:morph_wallet/cores/size_config.dart';
 
 class PrimaryButton extends StatelessWidget {
   final Function()? onPressed;
   final String title;
-  final MaterialStateProperty<Size?>? fixedSize;
-  final double borderRadius;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
+  final ButtonStyle? style;
 
   const PrimaryButton({
     Key? key,
     this.onPressed,
     required this.title,
-    this.fixedSize,
-    this.borderRadius = 8.0,
+    this.padding = const EdgeInsets.only(bottom: 16.0),
+    this.margin,
+    this.style,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ButtonStyle(
-        fixedSize: fixedSize ??
-            MaterialStateProperty.all(
-              Size(
-                SizeConfig.blockSizeVertical * 41,
-                SizeConfig.blockSizeHorizontal * 13,
-              ),
-            ),
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-        ),
+    return Container(
+      padding: padding,
+      margin: margin,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: style,
+        child: Text(title),
       ),
-      child: Text(title),
     );
   }
 }

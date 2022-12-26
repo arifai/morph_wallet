@@ -12,6 +12,7 @@ import 'package:morph_wallet/cores/morph_theme.dart';
 import 'package:morph_wallet/cores/route_generator.dart';
 import 'package:morph_wallet/repositories/account/account_repository.dart';
 import 'package:morph_wallet/services/navigation_service.dart';
+import 'package:morph_wallet/widgets/commons/constants.dart';
 
 void main() async {
   // Load .env file
@@ -19,6 +20,7 @@ void main() async {
 
   // Hive initialize
   await Hive.initFlutter();
+  await Hive.openBox(RepoKeys.account);
 
   // Setup locator
   setupLocator();
@@ -36,7 +38,7 @@ void main() async {
   Bloc.observer = SimpleBlocObserver();
 
   runApp(
-    BlocProvider<MorphBloc>(
+    BlocProvider(
       create: (_) => MorphBloc(accountRepository)..add(StartupEvent()),
       child: MorphWalletApp(accountRepository: accountRepository),
     ),
@@ -51,12 +53,24 @@ class MorphWalletApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ;
+    final NavigationService navService = locator<NavigationService>();
+
     return MaterialApp(
       title: 'Morph Wallet',
       themeMode: ThemeMode.dark,
       darkTheme: MorphTheme.applyDarkMode,
+      home: BlocListener<MorphBloc, MorphState>(
+        listener: (_, state) {
+          if (state.status == MorphStatus.hasAnAccount) {
+            navService.pushTo(MorphRoute.main);
+          } else if (state.status == MorphStatus.createOrImport) {
+            navService.pushTo(MorphRoute.onboarding);
+          }
+        },
+        child: const SizedBox(),
+      ),
       navigatorKey: locator<NavigationService>().navigationKey,
-      initialRoute: MorphRoute.onboarding,
       onGenerateRoute: (settings) =>
           RouteGenerator(settings, accountRepository).generate(),
     );

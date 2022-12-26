@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:morph_wallet/cores/locator.dart';
 import 'package:morph_wallet/cores/morph_core.dart';
+import 'package:morph_wallet/models/args/create_or_import_args.dart';
 import 'package:morph_wallet/services/navigation_service.dart';
-import 'package:morph_wallet/services/wallet_service.dart';
 import 'package:morph_wallet/widgets/buttons/primary_button.dart';
 import 'package:morph_wallet/widgets/buttons/secondary_button.dart';
 
@@ -12,10 +12,16 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final NavigationService navService = locator<NavigationService>();
-    List<String> mnemonic = WalletService().generetaMnemonic();
 
     void onCreateButtonPressed() {
-      navService.navigateTo(MorphRoute.createWallet, arguments: mnemonic);
+      navService.navigateTo(MorphRoute.createWallet);
+    }
+
+    void onImportButtonPressed() {
+      navService.navigateTo(
+        MorphRoute.walletInfoForm,
+        arguments: CreateOrImportArgs(isImport: true),
+      );
     }
 
     return Scaffold(
@@ -67,19 +73,13 @@ class OnboardingScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: PrimaryButton(
-                      title: 'Buat Dompet Baru',
-                      onPressed: onCreateButtonPressed,
-                    ),
+                  PrimaryButton(
+                    title: 'Buat Dompet Baru',
+                    onPressed: onCreateButtonPressed,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: SecondaryButton(
-                      title: 'Impor Dompet Anda',
-                      onPressed: () {},
-                    ),
+                  SecondaryButton(
+                    title: 'Impor Dompet Anda',
+                    onPressed: onImportButtonPressed,
                   ),
                 ],
               ),
