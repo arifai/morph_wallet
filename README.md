@@ -12,7 +12,7 @@ Solana wallet with Flutter framework.
 - [ ] Display NFTs
 - [ ] Show combined tokens balance to FIAT currency
 - [ ] Scan QR code
-- [ ] Show transactions history (sent, receive, etc)
+- [ ] Show SPL transactions (sent, receive, etc)
 
 # Licence
 
